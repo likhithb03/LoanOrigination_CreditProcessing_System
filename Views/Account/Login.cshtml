@@ -1,0 +1,223 @@
+@{
+    ViewData["Title"] = "Login";
+    Layout = null; // Login uses its own layout, not the dashboard shell
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LOCPS — Secure Login Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/theme.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--secondary-navy) 0%, #1E3A5F 50%, var(--primary-blue) 100%);
+            padding: 20px;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 480px;
+            border-radius: var(--radius-xl);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            border: none;
+        }
+        .login-brand {
+            background: #FFFFFF;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .nav-pills-custom .nav-link {
+            color: #64748B;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+        .nav-pills-custom .nav-link.active {
+            background-color: var(--primary-blue);
+            color: #FFFFFF;
+        }
+        .quick-btn {
+            transition: all 0.2s ease;
+            text-align: left;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+        }
+        .quick-btn:hover {
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card bg-white">
+            <!-- Brand Header -->
+            <div class="login-brand text-center py-4 bg-white">
+                <h2 class="fw-bold m-0" style="color: var(--secondary-navy);">
+                    <i class="fa-solid fa-vault me-2" style="color: var(--primary-blue);"></i>LOCPS
+                </h2>
+                <p class="text-muted small mb-0 mt-1">Loan Origination & Credit Processing System</p>
+            </div>
+
+            <!-- Tab Switching Layout -->
+            <div class="px-4 pt-3">
+                <ul class="nav nav-pills nav-pills-custom g-2 d-flex justify-content-center border-bottom pb-3" id="loginTab" role="tablist">
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100 active" id="customer-tab-btn" data-bs-toggle="pill" data-bs-target="#customer-pane" type="button" role="tab" aria-selected="true">
+                            <i class="fa-solid fa-user me-2"></i>Customer Portal
+                        </button>
+                    </li>
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100" id="staff-tab-btn" data-bs-toggle="pill" data-bs-target="#staff-pane" type="button" role="tab" aria-selected="false">
+                            <i class="fa-solid fa-user-tie me-2"></i>Staff Portal
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="p-4 pt-3">
+                <div class="tab-content" id="loginTabContent">
+                    
+                    <!-- CUSTOMER PORTAL TAB -->
+                    <div class="tab-pane fade show active" id="customer-pane" role="tabpanel" aria-labelledby="customer-tab-btn">
+                        <h5 class="fw-bold text-dark mb-1">Customer Sign In</h5>
+                        <p class="text-muted small mb-4">View your loan catalog, submit application wizard, and check processing status.</p>
+
+                        <form onsubmit="handleLogin(event, 'customer')">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted small">Customer Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-envelope text-muted"></i></span>
+                                    <input type="email" id="custEmail" class="form-control py-2 border-start-0 shadow-none" placeholder="customer@locps.in" value="customer@locps.in" required />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted small">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock text-muted"></i></span>
+                                    <input type="password" id="custPassword" class="form-control py-2 border-start-0 shadow-none" placeholder="••••••••" value="demo1234" required />
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold mb-3" style="border-radius: var(--radius-md);">
+                                <i class="fa-solid fa-right-to-bracket me-2"></i> Log In as Customer
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- STAFF PORTAL TAB -->
+                    <div class="tab-pane fade" id="staff-pane" role="tabpanel" aria-labelledby="staff-tab-btn">
+                        <h5 class="fw-bold text-dark mb-1">Enterprise Staff Access</h5>
+                        <p class="text-muted small mb-3">Sign in using your system administrator, loan officer, or underwriter role credentials.</p>
+
+                        <form onsubmit="handleLogin(event, 'officer')">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted small">Staff Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-envelope text-muted"></i></span>
+                                    <input type="email" id="staffEmail" class="form-control py-2 border-start-0 shadow-none" placeholder="officer@locps.in" value="likhith.k@locps.in" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted small">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock text-muted"></i></span>
+                                    <input type="password" id="staffPassword" class="form-control py-2 border-start-0 shadow-none" placeholder="••••••••" value="demo1234" />
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-dark w-100 py-2 fw-semibold mb-4" style="border-radius: var(--radius-md);">
+                                <i class="fa-solid fa-shield-halved me-2"></i> Enterprise Login
+                            </button>
+                        </form>
+
+                        <div class="pt-3 border-top">
+                            <p class="text-muted small text-center mb-3">Quick Access (Staff Roles)</p>
+                            <div class="d-flex flex-column gap-2">
+                                <button class="btn btn-outline-primary btn-sm quick-btn w-100" onclick="quickLogin('officer')">
+                                    <i class="fa-solid fa-user-tie me-2 text-primary"></i> Login as Loan Officer
+                                </button>
+                                <button class="btn btn-outline-info btn-sm quick-btn w-100" onclick="quickLogin('underwriter')">
+                                    <i class="fa-solid fa-signature me-2 text-info"></i> Login as Underwriter
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm quick-btn w-100" onclick="quickLogin('admin')">
+                                    <i class="fa-solid fa-user-shield me-2 text-danger"></i> Login as System Admin
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="bg-light text-center py-3 border-top">
+                <span class="text-muted small">&copy; 2026 LOCPS Banking Portal. Secured with TLS 1.3.</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Check url search parameters to pre-select fields or types
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnUrl = urlParams.get('returnUrl');
+        const type = urlParams.get('type');
+
+        // Store return routing configs
+        if (returnUrl) {
+            localStorage.setItem("locps_return_url", returnUrl);
+        }
+        if (type) {
+            localStorage.setItem("locps_preselected_type", type);
+        }
+
+        function handleLogin(e, defaultRole) {
+            e.preventDefault();
+            const activeTabPane = document.querySelector(".tab-pane.active");
+            const submitBtn = activeTabPane.querySelector("button[type='submit']");
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Authenticating...';
+
+            localStorage.setItem("locps_demo_role", defaultRole);
+            
+            setTimeout(() => {
+                redirectUser();
+            }, 1200);
+        }
+
+        function quickLogin(role) {
+            localStorage.setItem("locps_demo_role", role);
+            redirectUser();
+        }
+
+        function redirectUser() {
+            const role = localStorage.getItem("locps_demo_role") || "officer";
+            const storedReturn = localStorage.getItem("locps_return_url");
+            
+            // Clear return vars
+            localStorage.removeItem("locps_return_url");
+
+            if (role === "customer" && storedReturn && storedReturn.includes("/Loan/Create")) {
+                window.location.href = storedReturn;
+            } else {
+                window.location.href = "/Dashboard";
+            }
+        }
+    </script>
+</body>
+</html>

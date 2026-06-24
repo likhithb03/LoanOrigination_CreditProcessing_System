@@ -1,0 +1,89 @@
+@{
+    ViewData["Title"] = "Create Loan Product";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">Create New Loan Product</h1>
+        <p class="text-muted">Define a new lending product with pricing and eligibility configuration.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold m-0">Product Configuration</h5>
+            </div>
+            <div class="card-body">
+                <form onsubmit="submitProduct(event)">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold text-muted small">Product Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control py-2 shadow-none" placeholder="e.g. Home Renovation Loan" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Minimum Interest Rate (% p.a.) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.1" min="1" max="30" class="form-control py-2 shadow-none" placeholder="e.g. 8.5" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Maximum Interest Rate (% p.a.) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.1" min="1" max="30" class="form-control py-2 shadow-none" placeholder="e.g. 12.0" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Maximum Loan Amount (INR) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted">₹</span>
+                                <input type="number" class="form-control py-2 shadow-none" placeholder="e.g. 5000000" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Processing Fee (%)</label>
+                            <input type="number" step="0.01" class="form-control py-2 shadow-none" placeholder="e.g. 0.25" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Minimum Tenure (Months) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control py-2 shadow-none" placeholder="e.g. 12" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Maximum Tenure (Months) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control py-2 shadow-none" placeholder="e.g. 360" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Minimum CIBIL Score Required</label>
+                            <input type="number" class="form-control py-2 shadow-none" placeholder="e.g. 700" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Product Status</label>
+                            <select class="form-select py-2 shadow-none">
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive (Draft)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" id="btnSaveProduct" class="btn btn-primary px-4 py-2">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> Save Product
+                        </button>
+                        <a href="/Product" class="btn btn-light border px-4 py-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function submitProduct(e) {
+            e.preventDefault();
+            const btn = document.getElementById("btnSaveProduct");
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span> Saving...`;
+            setTimeout(() => {
+                showToast("Product Created", "New loan product has been added to the catalog.", "success");
+                setTimeout(() => { window.location.href = "/Product"; }, 1200);
+            }, 1000);
+        }
+    </script>
+}

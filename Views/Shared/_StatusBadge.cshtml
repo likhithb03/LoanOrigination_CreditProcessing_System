@@ -1,0 +1,15 @@
+@model string
+@{
+    var status = Model ?? "pending";
+    var cssClass = "badge-status-pending";
+    
+    var lower = status.ToLowerInvariant();
+    if (lower == "approved" || lower == "completed" || lower == "verified" || lower == "active" || lower == "success" || lower == "passed") {
+        cssClass = "badge-status-approved";
+    } else if (lower == "rejected" || lower == "failed" || lower == "inactive" || lower == "denied" || lower == "danger") {
+        cssClass = "badge-status-rejected";
+    } else if (lower == "processing" || lower == "disbursed" || lower == "under review" || lower == "review" || lower == "submitted") {
+        cssClass = "badge-status-processing";
+    }
+}
+<span class="badge-status @cssClass">@status</span>

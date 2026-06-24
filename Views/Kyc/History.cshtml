@@ -1,0 +1,67 @@
+@{
+    ViewData["Title"] = "KYC Verification Logs";
+    ViewData["CurrentStep"] = "KYC Verification";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">KYC Audit Logs</h1>
+        <p class="text-muted">Review compliance checklist runs and historical verification logs.</p>
+    </div>
+</div>
+
+@await Html.PartialAsync("_WorkflowStepper")
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="card-title fw-bold text-dark m-0"><i class="fa-solid fa-clock-rotate-left text-muted me-2"></i> Verification Audit Timeline (Customer: Rajesh Kumar)</h5>
+            </div>
+            
+            <div class="card-body">
+                <div class="timeline position-relative ps-4" style="border-left: 2px solid var(--border-color);">
+                    <!-- Timeline Item 1 -->
+                    <div class="position-relative mb-4">
+                        <div class="position-absolute bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="left: -33px; top: 0; width: 24px; height: 24px; z-index: 10;">
+                            <i class="fa-solid fa-check small" style="font-size: 0.65rem;"></i>
+                        </div>
+                        <div class="fw-bold">KYC Marked Compliant</div>
+                        <span class="text-muted small">By Loan Officer: Likhith Kumar on June 24, 2026 23:45</span>
+                        <p class="small text-muted mt-2 mb-0">System checked all conditions and validated credentials as Passed.</p>
+                    </div>
+
+                    <!-- Timeline Item 2 -->
+                    <div class="position-relative mb-4">
+                        <div class="position-absolute bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="left: -33px; top: 0; width: 24px; height: 24px; z-index: 10;">
+                            <i class="fa-solid fa-check small" style="font-size: 0.65rem;"></i>
+                        </div>
+                        <div class="fw-bold">Aadhaar Bio-metrics Match Passed</div>
+                        <span class="text-muted small">Validated on June 24, 2026 23:42</span>
+                        <p class="small text-muted mt-2 mb-0">OTP verification code (UIDAI reference: #8849) matched database.</p>
+                    </div>
+
+                    <!-- Timeline Item 3 -->
+                    <div class="position-relative mb-4">
+                        <div class="position-absolute bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="left: -33px; top: 0; width: 24px; height: 24px; z-index: 10;">
+                            <i class="fa-solid fa-check small" style="font-size: 0.65rem;"></i>
+                        </div>
+                        <div class="fw-bold">PAN Card Database Match Passed</div>
+                        <span class="text-muted small">Validated on June 24, 2026 23:40</span>
+                        <p class="small text-muted mt-2 mb-0">Validated profile match against Income Tax Department (ITD) database for ID: BKDPK7849D.</p>
+                    </div>
+
+                    <!-- Timeline Item 4 -->
+                    <div class="position-relative">
+                        <div class="position-absolute bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="left: -33px; top: 0; width: 24px; height: 24px; z-index: 10;">
+                            <i class="fa-solid fa-plus small" style="font-size: 0.65rem;"></i>
+                        </div>
+                        <div class="fw-bold">KYC Record Created</div>
+                        <span class="text-muted small">Created on June 24, 2026 23:38</span>
+                        <p class="small text-muted mt-2 mb-0">Applicant profile registered. KYC checks queued.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

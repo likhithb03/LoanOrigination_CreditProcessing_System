@@ -1,0 +1,140 @@
+@{
+    ViewData["Title"] = "Scoring Engine Weights";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">Scoring Engine Configuration</h1>
+        <p class="text-muted">Adjust the credit risk weight parameters. Preview impact updates live.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold m-0">Risk Parameter Weights</h5>
+                <span class="text-muted small">Total allocation must equal <strong>100%</strong>.</span>
+            </div>
+            <div class="card-body">
+                <div id="scoringParams">
+                    <!-- Rendered by JS -->
+                </div>
+
+                <div class="alert border-0 mt-4 p-3" id="totalAlert" style="border-radius: var(--radius-md);">
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-semibold">Total Weight Allocation</span>
+                        <span class="fw-bold" id="totalWeightDisplay">100%</span>
+                    </div>
+                    <div class="progress mt-2" style="height: 6px;">
+                        <div class="progress-bar" id="totalWeightBar" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary px-4 py-2 mt-3" onclick="saveWeights()">
+                    <i class="fa-solid fa-floppy-disk me-2"></i> Save Configuration
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold m-0">Live Impact Preview</h5>
+                <span class="text-muted small">Score for sample applicant (CIBIL 785, DTI 32%).</span>
+            </div>
+            <div class="card-body" id="impactPreview">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const params = [
+            { id: "bureau", label: "Bureau Score (CIBIL)", weight: 35, sampleScore: 0.87 },
+            { id: "dti", label: "Debt-to-Income Ratio", weight: 25, sampleScore: 0.81 },
+            { id: "history", label: "Credit History Age", weight: 15, sampleScore: 1.0 },
+            { id: "repayment", label: "Repayment Consistency", weight: 15, sampleScore: 0.985 },
+            { id: "utilization", label: "Credit Utilization Rate", weight: 10, sampleScore: 0.52 }
+        ];
+
+        function renderParams() {
+            const container = document.getElementById("scoringParams");
+            container.innerHTML = params.map(p => `
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-semibold small text-dark">${p.label}</span>
+                        <span class="fw-bold text-primary small" id="lbl_${p.id}">${p.weight}%</span>
+                    </div>
+                    <input type="range" class="range-slider" id="slider_${p.id}" min="0" max="50" step="1" value="${p.weight}"
+                        oninput="updateWeight('${p.id}', this.value)" />
+                </div>
+            `).join('');
+            updateTotal();
+        }
+
+        function updateWeight(id, val) {
+            const p = params.find(x => x.id === id);
+            if (p) p.weight = parseInt(val);
+            document.getElementById("lbl_" + id).textContent = val + "%";
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const total = params.reduce((s, p) => s + p.weight, 0);
+            const bar = document.getElementById("totalWeightBar");
+            const display = document.getElementById("totalWeightDisplay");
+            const alert = document.getElementById("totalAlert");
+
+            display.textContent = total + "%";
+            const pct = Math.min(total, 100);
+            bar.style.width = pct + "%";
+
+            if (total === 100) {
+                bar.className = "progress-bar bg-success";
+                alert.className = "alert alert-success border-0 mt-4 p-3";
+            } else if (total > 100) {
+                bar.className = "progress-bar bg-danger";
+                alert.className = "alert alert-danger border-0 mt-4 p-3";
+            } else {
+                bar.className = "progress-bar bg-warning";
+                alert.className = "alert alert-warning border-0 mt-4 p-3";
+            }
+
+            renderImpact();
+        }
+
+        function renderImpact() {
+            const maxScore = 900;
+            let computed = 0;
+            params.forEach(p => { computed += (p.weight / 100) * p.sampleScore * maxScore; });
+            const score = Math.round(computed);
+            const grade = score >= 750 ? "Excellent (Tier A)" : score >= 700 ? "Good (Tier B)" : score >= 600 ? "Fair (Tier C)" : "Poor (Declined)";
+            const color = score >= 750 ? "success" : score >= 700 ? "info" : score >= 600 ? "warning" : "danger";
+            document.getElementById("impactPreview").innerHTML = `
+                <div class="text-center py-3">
+                    <div class="display-6 fw-bold text-${color}">${score}</div>
+                    <div class="text-muted small mt-1">Computed Credit Score</div>
+                    <span class="badge bg-${color} mt-2 px-3 py-2">${grade}</span>
+                </div>
+                <hr />
+                <ul class="list-group list-group-flush" style="font-size: 0.8rem;">
+                    ${params.map(p => `<li class="list-group-item px-0 py-2 d-flex justify-content-between">
+                        <span class="text-muted">${p.label}</span>
+                        <span class="fw-semibold">+${Math.round((p.weight/100)*p.sampleScore*maxScore)} pts</span>
+                    </li>`).join('')}
+                </ul>`;
+        }
+
+        function saveWeights() {
+            const total = params.reduce((s, p) => s + p.weight, 0);
+            if (total !== 100) { showToast("Validation Error", "Total weight must equal exactly 100%.", "warning"); return; }
+            showToast("Weights Saved", "Scoring engine configuration updated successfully.", "success");
+        }
+
+        document.addEventListener("DOMContentLoaded", renderParams);
+    </script>
+}

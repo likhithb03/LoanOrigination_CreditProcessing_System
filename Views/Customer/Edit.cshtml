@@ -1,0 +1,121 @@
+@{
+    ViewData["Title"] = "Edit Customer Profile";
+    ViewData["CurrentStep"] = "Customer Registration";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">Edit Customer Profile</h1>
+        <p class="text-muted">Modify onboarded profile details for this applicant.</p>
+    </div>
+</div>
+
+@await Html.PartialAsync("_WorkflowStepper")
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="card-title fw-bold text-dark m-0">Basic Profile Details (Customer ID: CUST-9011)</h5>
+            </div>
+            <div class="card-body">
+                <form id="editCustomerForm" onsubmit="submitMockEdit(event)">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">First Name <span class="text-danger">*</span></label>
+                            <input type="text" id="custFirstName" class="form-control py-2 shadow-none" value="Rajesh" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" id="custLastName" class="form-control py-2 shadow-none" value="Kumar" required />
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control py-2 shadow-none" value="rajesh.kumar@email.com" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Phone Number <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control py-2 shadow-none" value="+91 98765 43210" required />
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Date of Birth <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control py-2 shadow-none" value="1988-05-14" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Gender <span class="text-danger">*</span></label>
+                            <select class="form-select py-2 shadow-none" required>
+                                <option value="male" selected>Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12"><hr class="text-muted opacity-25"></div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Employment Type <span class="text-danger">*</span></label>
+                            <select class="form-select py-2 shadow-none" required>
+                                <option value="salaried" selected>Salaried</option>
+                                <option value="self-employed">Self-Employed / Business Owner</option>
+                                <option value="unemployed">Unemployed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Monthly Net Income (INR) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted">₹</span>
+                                <input type="number" class="form-control py-2 shadow-none" value="85000" required />
+                            </div>
+                        </div>
+
+                        <div class="col-12"><hr class="text-muted opacity-25"></div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">ID Document Type <span class="text-danger">*</span></label>
+                            <select class="form-select py-2 shadow-none" required>
+                                <option value="pan" selected>PAN Card</option>
+                                <option value="passport">Passport</option>
+                                <option value="aadhaar">Aadhaar Card</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Document ID Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control py-2 shadow-none" value="BKDPK7849D" required />
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" id="btnEditSubmit" class="btn btn-primary px-4 py-2" style="border-radius: var(--radius-md);">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> Update Changes
+                        </button>
+                        <a href="/Customer" class="btn btn-light border px-4 py-2" style="border-radius: var(--radius-md);">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function submitMockEdit(e) {
+            e.preventDefault();
+            const btn = document.getElementById("btnEditSubmit");
+            const first = document.getElementById("custFirstName").value;
+            const last = document.getElementById("custLastName").value;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Saving...`;
+            
+            setTimeout(() => {
+                showToast("Success", `Profile updated for ${first} ${last} successfully.`, "success");
+                
+                setTimeout(() => {
+                    window.location.href = "/Customer";
+                }, 1200);
+            }, 1000);
+        }
+    </script>
+}

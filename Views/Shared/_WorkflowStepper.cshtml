@@ -1,0 +1,56 @@
+@{
+    var steps = new[] {
+        "Dashboard", 
+        "Customer Registration", 
+        "Loan Application", 
+        "KYC Verification", 
+        "Credit Evaluation", 
+        "Document Upload", 
+        "Document Validation", 
+        "Underwriter Review", 
+        "Approve/Reject", 
+        "Disbursement", 
+        "Completed"
+    };
+    var currentStep = ViewData["CurrentStep"] as string ?? "";
+    var currentIndex = Array.IndexOf(steps, currentStep);
+    
+    // Fallback search matches to simplify usage
+    if (currentIndex == -1 && !string.IsNullOrEmpty(currentStep)) {
+        if (currentStep.Contains("Dashboard")) currentIndex = 0;
+        else if (currentStep.Contains("Registration") || currentStep.Contains("Customer")) currentIndex = 1;
+        else if (currentStep.Contains("Application") || currentStep.Contains("Loan")) currentIndex = 2;
+        else if (currentStep.Contains("KYC") || currentStep.Contains("Verify")) currentIndex = 3;
+        else if (currentStep.Contains("Credit") || currentStep.Contains("Evaluate")) currentIndex = 4;
+        else if (currentStep.Contains("Upload")) currentIndex = 5;
+        else if (currentStep.Contains("Validate")) currentIndex = 6;
+        else if (currentStep.Contains("Review") || currentStep.Contains("Approval")) currentIndex = 7;
+        else if (currentStep.Contains("Decision") || currentStep.Contains("Approve") || currentStep.Contains("Reject")) currentIndex = 8;
+        else if (currentStep.Contains("Disbursement")) currentIndex = 9;
+        else if (currentStep.Contains("Completed")) currentIndex = 10;
+    }
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body py-3">
+        <div class="stepper-container">
+            <div class="stepper">
+                @for (int i = 0; i < steps.Length; i++)
+                {
+                    var stepClass = "";
+                    if (i < currentIndex) stepClass = "completed";
+                    else if (i == currentIndex) stepClass = "active";
+                    
+                    var iconHtml = "";
+                    if (i < currentIndex) iconHtml = "<i class=\"fa-solid fa-check\"></i>";
+                    else iconHtml = (i + 1).ToString();
+
+                    <div class="step-item @stepClass">
+                        <div class="step-circle">@Html.Raw(iconHtml)</div>
+                        <div class="step-label">@steps[i]</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

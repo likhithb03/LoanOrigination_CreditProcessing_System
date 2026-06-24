@@ -1,0 +1,136 @@
+@{
+    ViewData["Title"] = "Register Customer";
+    ViewData["CurrentStep"] = "Customer Registration";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">Register New Customer</h1>
+        <p class="text-muted">Onboard a new applicant into the banking core database.</p>
+    </div>
+</div>
+
+@await Html.PartialAsync("_WorkflowStepper")
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="card-title fw-bold text-dark m-0">Basic Profile Details</h5>
+            </div>
+            <div class="card-body">
+                <form id="createCustomerForm" onsubmit="submitMockCustomer(event)">
+                    <!-- Grid System for Forms -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control py-2 shadow-none" placeholder="e.g. Rajesh" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control py-2 shadow-none" placeholder="e.g. Kumar" required />
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control py-2 shadow-none" placeholder="e.g. name@domain.com" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Phone Number <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control py-2 shadow-none" placeholder="e.g. +91 98765 43210" required />
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Date of Birth <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control py-2 shadow-none" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Gender <span class="text-danger">*</span></label>
+                            <select class="form-select py-2 shadow-none" required>
+                                <option value="" disabled selected>Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12"><hr class="text-muted opacity-25"></div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Employment Type <span class="text-danger">*</span></label>
+                            <select class="form-select py-2 shadow-none" required>
+                                <option value="" disabled selected>Select employment</option>
+                                <option value="salaried">Salaried</option>
+                                <option value="self-employed">Self-Employed / Business Owner</option>
+                                <option value="unemployed">Unemployed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Monthly Net Income (INR) <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted">₹</span>
+                                <input type="number" class="form-control py-2 shadow-none" placeholder="e.g. 75000" required />
+                            </div>
+                        </div>
+
+                        <div class="col-12"><hr class="text-muted opacity-25"></div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">ID Document Type <span class="text-danger">*</span></label>
+                            <select class="form-select py-2 shadow-none" required>
+                                <option value="pan" selected>PAN Card</option>
+                                <option value="passport">Passport</option>
+                                <option value="aadhaar">Aadhaar Card</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Document ID Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control py-2 shadow-none" placeholder="e.g. ABCDE1234F" required />
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" id="btnSubmit" class="btn btn-primary px-4 py-2" style="border-radius: var(--radius-md);">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> Save & Continue
+                        </button>
+                        <a href="/Customer" class="btn btn-light border px-4 py-2" style="border-radius: var(--radius-md);">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="card border-0 shadow-sm bg-primary text-white" style="border-radius: var(--radius-lg);">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="fa-solid fa-circle-question me-2"></i> Onboarding Guidance</h6>
+                <ul class="small ps-3 mb-0" style="line-height: 1.6;">
+                    <li class="mb-2">Ensure name matches exactly with the provided PAN card.</li>
+                    <li class="mb-2">Monthly income should represent verifiable net take-home salary.</li>
+                    <li class="mb-2">A temporary verification token will be sent to the applicant's mobile number.</li>
+                    <li>KYC verification checklist will initiate immediately after saving.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function submitMockCustomer(e) {
+            e.preventDefault();
+            const btn = document.getElementById("btnSubmit");
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Creating...`;
+            
+            setTimeout(() => {
+                showToast("Success", "Customer Rajesh Kumar has been registered successfully with ID CUST-9018.", "success");
+                
+                setTimeout(() => {
+                    window.location.href = "/Customer";
+                }, 1200);
+            }, 1000);
+        }
+    </script>
+}

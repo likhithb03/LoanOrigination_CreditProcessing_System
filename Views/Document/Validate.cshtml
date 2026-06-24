@@ -1,0 +1,104 @@
+@{
+    ViewData["Title"] = "Document Validation";
+    ViewData["CurrentStep"] = "Document Validation";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">Document Validation Desk</h1>
+        <p class="text-muted">Review, accept or reject uploaded documents for Application <strong>LOC-9844-32</strong>.</p>
+    </div>
+</div>
+
+@await Html.PartialAsync("_WorkflowStepper")
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+        <h5 class="card-title fw-bold m-0">Submitted Documents Review Queue</h5>
+        <span class="badge bg-warning rounded-pill px-3">3 Pending Review</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive border-0">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Document Name</th>
+                        <th>Category</th>
+                        <th>File Type</th>
+                        <th>Upload Date</th>
+                        <th>Validation Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="validationTableBody">
+                    <!-- Rendered by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+        <span class="text-muted small">All mandatory documents must be accepted before underwriting.</span>
+        <button class="btn btn-success px-4" onclick="approveAllDocs()">
+            <i class="fa-solid fa-check-double me-2"></i> Approve All & Forward
+        </button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const validationDocs = [
+            { name: "PAN_Card_Rajesh_Kumar.pdf", category: "Identity", type: "PDF", uploadDate: "2026-06-24", status: "Accepted" },
+            { name: "Salary_Slip_May_2026.pdf", category: "Income Proof", type: "PDF", uploadDate: "2026-06-24", status: "Accepted" },
+            { name: "Bank_Statement_HDFC_Jan_Jun.pdf", category: "Bank Statement", type: "PDF", uploadDate: "2026-06-24", status: "Pending" },
+            { name: "Property_Title_Deed_Bangalore.pdf", category: "Property Docs", type: "PDF", uploadDate: "2026-06-24", status: "Pending" },
+            { name: "Employer_Letter_TechCorp.pdf", category: "Employer Letter", type: "PDF", uploadDate: "2026-06-24", status: "Pending" }
+        ];
+
+        function renderValidationTable() {
+            const tbody = document.getElementById("validationTableBody");
+            tbody.innerHTML = validationDocs.map((doc, idx) => {
+                let badgeClass = "badge-status-pending";
+                if (doc.status === "Accepted") badgeClass = "badge-status-approved";
+                if (doc.status === "Rejected") badgeClass = "badge-status-rejected";
+
+                return `
+                    <tr id="docRow${idx}">
+                        <td><i class="fa-solid fa-file-pdf text-danger me-2"></i><span class="fw-semibold">${doc.name}</span></td>
+                        <td>${doc.category}</td>
+                        <td><span class="badge bg-light text-secondary border">${doc.type}</span></td>
+                        <td>${doc.uploadDate}</td>
+                        <td><span class="badge-status ${badgeClass}" id="docBadge${idx}">${doc.status}</span></td>
+                        <td class="text-end">
+                            <div class="d-flex gap-1 justify-content-end">
+                                ${doc.status !== "Accepted" ? `<button class="btn btn-sm btn-outline-success" onclick="setDocStatus(${idx},'Accepted')"><i class="fa-solid fa-check"></i></button>` : ''}
+                                ${doc.status !== "Rejected" ? `<button class="btn btn-sm btn-outline-danger" onclick="setDocStatus(${idx},'Rejected')"><i class="fa-solid fa-xmark"></i></button>` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function setDocStatus(idx, status) {
+            validationDocs[idx].status = status;
+            renderValidationTable();
+            const type = status === "Accepted" ? "success" : "warning";
+            showToast("Status Updated", `${validationDocs[idx].name} marked as <strong>${status}</strong>.`, type);
+        }
+
+        function approveAllDocs() {
+            showConfirmationModal(
+                "Approve All Documents?",
+                "Marking all documents as accepted will forward the application to the underwriting queue. Are you sure?",
+                function() {
+                    validationDocs.forEach(d => d.status = "Accepted");
+                    renderValidationTable();
+                    showToast("Documents Approved", "All documents accepted. Application forwarded for underwriting review.", "success");
+                    setTimeout(() => { window.location.href = "/Approval/Review/9844"; }, 1500);
+                }
+            );
+        }
+
+        document.addEventListener("DOMContentLoaded", renderValidationTable);
+    </script>
+}

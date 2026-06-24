@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "Loan Products";
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-sm-6">
+        <h1 class="h3 fw-bold text-dark m-0">Loan Product Catalog</h1>
+        <p class="text-muted mb-0">Manage all available loan product offerings and configurations.</p>
+    </div>
+    <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+        <a href="/Product/Create" class="btn btn-primary px-4 py-2" style="border-radius: var(--radius-md);">
+            <i class="fa-solid fa-plus me-2"></i> Create New Product
+        </a>
+    </div>
+</div>
+
+<div class="row g-4" id="productGrid">
+    <!-- Rendered by JS -->
+</div>
+
+@section Scripts {
+    <script>
+        const productsData = [
+            { id: 1, name: "Home Purchase Loan", rate: "8.5% – 10.0%", maxAmount: "₹ 5 Crore", tenure: "10 – 30 Years", color: "#1A56DB", icon: "fa-house", status: "Active" },
+            { id: 2, name: "Personal Express Loan", rate: "10.0% – 14.0%", maxAmount: "₹ 25 Lakhs", tenure: "1 – 7 Years", color: "#10B981", icon: "fa-user-tag", status: "Active" },
+            { id: 3, name: "Commercial Equipment Loan", rate: "9.5% – 13.0%", maxAmount: "₹ 2 Crore", tenure: "3 – 10 Years", color: "#F59E0B", icon: "fa-industry", status: "Active" },
+            { id: 4, name: "Education Assistance Loan", rate: "7.0% – 9.0%", maxAmount: "₹ 50 Lakhs", tenure: "5 – 15 Years", color: "#8B5CF6", icon: "fa-graduation-cap", status: "Active" },
+            { id: 5, name: "Vehicle Finance Loan", rate: "9.0% – 12.0%", maxAmount: "₹ 75 Lakhs", tenure: "1 – 7 Years", color: "#06B6D4", icon: "fa-car", status: "Inactive" },
+            { id: 6, name: "Overdraft Credit Facility", rate: "12.0% – 16.0%", maxAmount: "₹ 10 Lakhs", tenure: "Rolling", color: "#EF4444", icon: "fa-chart-line", status: "Active" }
+        ];
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const grid = document.getElementById("productGrid");
+            grid.innerHTML = productsData.map(p => `
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 card-hover">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 48px; height: 48px; background-color: ${p.color};">
+                                    <i class="fa-solid ${p.icon}"></i>
+                                </div>
+                                <span class="badge-status ${p.status === 'Active' ? 'badge-status-approved' : 'badge-status-rejected'}">${p.status}</span>
+                            </div>
+                            <h5 class="fw-bold text-dark mb-2">${p.name}</h5>
+                            <ul class="list-unstyled text-muted small mb-3">
+                                <li class="mb-1"><i class="fa-solid fa-percent me-2 text-primary opacity-50"></i> Interest: <strong>${p.rate}</strong></li>
+                                <li class="mb-1"><i class="fa-solid fa-sack-dollar me-2 text-primary opacity-50"></i> Max: <strong>${p.maxAmount}</strong></li>
+                                <li><i class="fa-solid fa-clock me-2 text-primary opacity-50"></i> Tenure: <strong>${p.tenure}</strong></li>
+                            </ul>
+                            <a href="/Product/Details/${p.id}" class="btn btn-outline-primary btn-sm w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        });
+    </script>
+}

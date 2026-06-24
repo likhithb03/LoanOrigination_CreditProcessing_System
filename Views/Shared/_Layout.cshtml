@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LOCPS Banking Portal</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Custom Theme CSS -->
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Responsive Side Navigation -->
+    @await Html.PartialAsync("_Sidebar")
+
+    <!-- Main Content Wrapper -->
+    <div id="wrapper">
+        <!-- Top Toolbar -->
+        @await Html.PartialAsync("_Topbar")
+
+        <!-- Main Body Content -->
+        <main id="content">
+            <!-- Breadcrumbs -->
+            @await Html.PartialAsync("_Breadcrumb")
+            
+            @RenderBody()
+        </main>
+
+        <!-- Footer -->
+        @await Html.PartialAsync("_Footer")
+    </div>
+
+    <!-- Global Toast Container -->
+    @await Html.PartialAsync("_Toast")
+
+    <!-- Global Reusable Confirmation Modal -->
+    @await Html.PartialAsync("_ConfirmationModal")
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Bootstrap 5 Bundle JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Global Scripts -->
+    <script src="~/js/toast.js" asp-append-version="true"></script>
+    <script src="~/js/modal.js" asp-append-version="true"></script>
+    <script src="~/js/sidebar.js" asp-append-version="true"></script>
+
+    <!-- Page Specific Script Files -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

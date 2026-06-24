@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Add System User";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">Add New System User</h1>
+        <p class="text-muted">Create a staff account with role-based portal access.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3"><h5 class="fw-bold m-0">User Account Details</h5></div>
+            <div class="card-body">
+                <form onsubmit="createUser(event)">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control py-2 shadow-none" placeholder="e.g. Pradeep Menon" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control py-2 shadow-none" placeholder="e.g. pradeep@locps.in" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Assigned Role <span class="text-danger">*</span></label>
+                            <select class="form-select py-2 shadow-none" required>
+                                <option value="" disabled selected>Select role</option>
+                                <option value="officer">Loan Officer</option>
+                                <option value="underwriter">Underwriter</option>
+                                <option value="admin">System Admin</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Assigned Branch</label>
+                            <select class="form-select py-2 shadow-none">
+                                <option value="hq" selected>Bangalore HQ</option>
+                                <option value="chennai">Chennai Branch</option>
+                                <option value="mumbai">Mumbai Branch</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Initial Password</label>
+                            <input type="password" class="form-control py-2 shadow-none" placeholder="Temp password" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Account Status</label>
+                            <select class="form-select py-2 shadow-none">
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" id="btnCreateUser" class="btn btn-primary px-4 py-2">
+                            <i class="fa-solid fa-user-plus me-2"></i> Create User Account
+                        </button>
+                        <a href="/UserManagement" class="btn btn-light border px-4 py-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function createUser(e) {
+            e.preventDefault();
+            const btn = document.getElementById("btnCreateUser");
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span> Creating...`;
+            setTimeout(() => {
+                showToast("User Created", "New system user account has been provisioned.", "success");
+                setTimeout(() => { window.location.href = "/UserManagement"; }, 1200);
+            }, 1000);
+        }
+    </script>
+}

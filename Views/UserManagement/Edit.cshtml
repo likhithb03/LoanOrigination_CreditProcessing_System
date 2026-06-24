@@ -1,0 +1,76 @@
+@{
+    ViewData["Title"] = "Edit User Account";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">Edit User Account</h1>
+        <p class="text-muted">Modify role, branch, and access configuration.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3"><h5 class="fw-bold m-0">Edit: Anjali Sharma</h5></div>
+            <div class="card-body">
+                <form onsubmit="saveUser(event)">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Full Name</label>
+                            <input type="text" class="form-control py-2 shadow-none" value="Anjali Sharma" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Email Address</label>
+                            <input type="email" class="form-control py-2 shadow-none" value="anjali.s@locps.in" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Assigned Role</label>
+                            <select class="form-select py-2 shadow-none">
+                                <option value="officer">Loan Officer</option>
+                                <option value="underwriter" selected>Underwriter</option>
+                                <option value="admin">System Admin</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Branch</label>
+                            <select class="form-select py-2 shadow-none">
+                                <option value="hq" selected>Bangalore HQ</option>
+                                <option value="chennai">Chennai Branch</option>
+                                <option value="mumbai">Mumbai Branch</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Account Status</label>
+                            <select class="form-select py-2 shadow-none">
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" id="btnSaveUser" class="btn btn-primary px-4 py-2">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> Save Changes
+                        </button>
+                        <a href="/UserManagement" class="btn btn-light border px-4 py-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function saveUser(e) {
+            e.preventDefault();
+            const btn = document.getElementById("btnSaveUser");
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span> Saving...`;
+            setTimeout(() => {
+                showToast("User Updated", "Account changes for Anjali Sharma saved.", "success");
+                setTimeout(() => { window.location.href = "/UserManagement"; }, 1200);
+            }, 1000);
+        }
+    </script>
+}

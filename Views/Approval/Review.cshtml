@@ -1,0 +1,204 @@
+@{
+    ViewData["Title"] = "Underwriter Review";
+    ViewData["CurrentStep"] = "Underwriter Review";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 fw-bold text-dark mb-1">Underwriter Decision Desk</h1>
+        <p class="text-muted">Final review panel for loan application <strong>LOC-9844-32</strong> — Rajesh Kumar.</p>
+    </div>
+</div>
+
+@await Html.PartialAsync("_WorkflowStepper")
+
+<div class="row g-4">
+    <!-- Left Column - Full application summary -->
+    <div class="col-lg-8">
+        <!-- Applicant Overview -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="card-title fw-bold m-0">Applicant & Loan Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <div class="bg-light p-3 rounded text-center">
+                            <div class="text-muted small">Loan Amount</div>
+                            <div class="fw-bold text-dark mt-1">₹ 45 Lakhs</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="bg-light p-3 rounded text-center">
+                            <div class="text-muted small">Interest Rate</div>
+                            <div class="fw-bold text-primary mt-1">8.5% p.a.</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="bg-light p-3 rounded text-center">
+                            <div class="text-muted small">Monthly EMI</div>
+                            <div class="fw-bold text-success mt-1">₹ 44,312</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="bg-light p-3 rounded text-center">
+                            <div class="text-muted small">CIBIL Score</div>
+                            <div class="fw-bold text-success mt-1">785 / 900</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Due Diligence Checklist -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="card-title fw-bold m-0">Due Diligence Summary</h5>
+            </div>
+            <div class="card-body pt-0">
+                <ul class="list-group list-group-flush" style="font-size: 0.875rem;">
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span><i class="fa-solid fa-circle-check text-success me-2"></i> KYC Compliance Check</span>
+                        <span class="badge-status badge-status-approved">Verified</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span><i class="fa-solid fa-circle-check text-success me-2"></i> Credit Score Evaluation</span>
+                        <span class="badge-status badge-status-approved">Passed (Tier A)</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span><i class="fa-solid fa-circle-check text-success me-2"></i> Document Upload &amp; Validation</span>
+                        <span class="badge-status badge-status-approved">All Accepted</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i> Credit Utilization Rate</span>
+                        <span class="badge-status badge-status-pending">Moderate (48.2%)</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span><i class="fa-solid fa-circle-check text-success me-2"></i> Income-to-EMI Ratio</span>
+                        <span class="badge-status badge-status-approved">Safe (52.1%)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Underwriter Remarks -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="card-title fw-bold m-0">Underwriter Remarks</h5>
+            </div>
+            <div class="card-body">
+                <textarea id="uwRemarks" class="form-control shadow-none" rows="4" placeholder="Enter your credit decision remarks here (required before approving or rejecting)..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column - Risk Panel -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h6 class="fw-bold m-0">Risk Composite Summary</h6>
+            </div>
+            <div class="card-body pt-0">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span class="text-muted">Overall Risk Score</span>
+                        <span class="fw-bold text-success">Low Risk</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: 78%;"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span class="text-muted">Loan-to-Value (LTV)</span>
+                        <span class="fw-bold text-warning">72.3%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-warning" style="width: 72.3%;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span class="text-muted">DTI Compliance</span>
+                        <span class="fw-bold text-success">Safe (32.4%)</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: 32.4%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h6 class="fw-bold m-0">Applicant Profile Snapshot</h6>
+            </div>
+            <div class="card-body pt-0" style="font-size: 0.85rem;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item px-0 py-2 d-flex justify-content-between">
+                        <span class="text-muted">Applicant</span><span class="fw-semibold">Rajesh Kumar</span>
+                    </li>
+                    <li class="list-group-item px-0 py-2 d-flex justify-content-between">
+                        <span class="text-muted">Monthly Income</span><span class="fw-semibold">₹ 85,000</span>
+                    </li>
+                    <li class="list-group-item px-0 py-2 d-flex justify-content-between">
+                        <span class="text-muted">Product</span><span class="fw-semibold">Home Purchase</span>
+                    </li>
+                    <li class="list-group-item px-0 py-2 d-flex justify-content-between">
+                        <span class="text-muted">Tenure</span><span class="fw-semibold">15 Years (180m)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sticky Decision Bar -->
+<div class="sticky-decision-bar d-flex justify-content-between align-items-center">
+    <span class="text-muted small"><i class="fa-solid fa-info-circle me-1"></i> Decision will be recorded in the audit trail.</span>
+    <div class="d-flex gap-2">
+        <a href="/Approval/Reject/9844" class="btn btn-outline-danger px-4" onclick="confirmReject(event)">
+            <i class="fa-solid fa-xmark-circle me-2"></i> Reject Loan
+        </a>
+        <a href="/Approval/Approve/9844" class="btn btn-success px-4" onclick="confirmApprove(event)">
+            <i class="fa-solid fa-check-circle me-2"></i> Approve Loan
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmApprove(e) {
+            e.preventDefault();
+            const remarks = document.getElementById("uwRemarks").value.trim();
+            if (!remarks) { showToast("Remarks Required", "Please enter underwriter remarks before approving.", "warning"); return; }
+            showConfirmationModal(
+                '<span class="text-success"><i class="fa-solid fa-check-circle me-2"></i>Approve Loan Application?</span>',
+                `<p>You are about to <strong>approve</strong> application <strong>LOC-9844-32</strong> for ₹ 45 Lakhs at 8.5% p.a.</p><p class="text-muted small mb-0">This action will be logged in the compliance audit trail.</p>`,
+                function () {
+                    document.getElementById("confirmationModalConfirmBtn").classList.replace("btn-primary","btn-success");
+                    showToast("Loan Approved!", "LOC-9844-32 has been approved and forwarded to Disbursement.", "success");
+                    setTimeout(() => { window.location.href = "/Disbursement/Create/9844"; }, 1500);
+                }
+            );
+            document.getElementById("confirmationModalConfirmBtn").textContent = "Confirm Approval";
+            document.getElementById("confirmationModalConfirmBtn").className = "btn btn-success px-4";
+        }
+
+        function confirmReject(e) {
+            e.preventDefault();
+            const remarks = document.getElementById("uwRemarks").value.trim();
+            if (!remarks) { showToast("Remarks Required", "Please enter rejection remarks before rejecting.", "warning"); return; }
+            showConfirmationModal(
+                '<span class="text-danger"><i class="fa-solid fa-xmark-circle me-2"></i>Reject Loan Application?</span>',
+                `<p>You are about to <strong class="text-danger">reject</strong> application <strong>LOC-9844-32</strong>.</p><p class="text-muted small mb-0">The applicant will be notified of the outcome.</p>`,
+                function () {
+                    showToast("Loan Rejected", "LOC-9844-32 has been rejected. Applicant notified.", "danger");
+                    setTimeout(() => { window.location.href = "/Loan"; }, 1500);
+                }
+            );
+            document.getElementById("confirmationModalConfirmBtn").textContent = "Confirm Rejection";
+            document.getElementById("confirmationModalConfirmBtn").className = "btn btn-danger px-4";
+        }
+    </script>
+}

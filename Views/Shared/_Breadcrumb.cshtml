@@ -1,0 +1,22 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var title = ViewData["Title"]?.ToString() ?? action;
+}
+
+@if (controller != "Account" || action != "Login")
+{
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb bg-transparent p-0 m-0" style="font-size: 0.85rem;">
+            <li class="breadcrumb-item"><a href="/Dashboard" class="text-decoration-none text-muted"><i class="fa-solid fa-house me-1"></i> Home</a></li>
+            @if (!string.IsNullOrEmpty(controller) && !controller.Equals("Dashboard", StringComparison.OrdinalIgnoreCase))
+            {
+                <li class="breadcrumb-item text-capitalize"><a href="/@controller" class="text-decoration-none text-muted">@controller</a></li>
+            }
+            @if (!string.IsNullOrEmpty(action) && !action.Equals("Index", StringComparison.OrdinalIgnoreCase))
+            {
+                <li class="breadcrumb-item active text-capitalize fw-semibold text-dark" aria-current="page">@title</li>
+            }
+        </ol>
+    </nav>
+}

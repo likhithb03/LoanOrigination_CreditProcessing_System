@@ -1,0 +1,161 @@
+@{
+    ViewData["Title"] = "Customer Profile Details";
+    ViewData["CurrentStep"] = "Customer Registration";
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-sm-6">
+        <h1 class="h3 fw-bold text-dark m-0">Customer Details</h1>
+        <p class="text-muted mb-0">Overview of profile data, KYC verify logs, and applications.</p>
+    </div>
+    <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+        <div class="d-flex gap-2 justify-content-sm-end">
+            <a href="/Customer/Edit/9011" class="btn btn-outline-primary px-3 py-2" style="border-radius: var(--radius-md);">
+                <i class="fa-solid fa-pen-to-square me-2"></i> Edit Profile
+            </a>
+            <a href="/Loan/Create?customerId=CUST-9011" class="btn btn-primary px-3 py-2" style="border-radius: var(--radius-md);">
+                <i class="fa-solid fa-plus-circle me-2"></i> Apply New Loan
+            </a>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_WorkflowStepper")
+
+<div class="row g-4">
+    <!-- Left Column - Profile Details -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body text-center py-4">
+                <div class="rounded-circle bg-primary text-white mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; font-size: 2.25rem; font-weight: 800;">R</div>
+                <h4 class="fw-bold text-dark mb-1">Rajesh Kumar</h4>
+                <p class="text-muted mb-3 small">CUST-9011 | Registered June 10, 2026</p>
+                <span class="badge-status badge-status-approved">KYC Verified</span>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h6 class="fw-bold text-dark m-0">Profile Summary</h6>
+            </div>
+            <div class="card-body pt-0">
+                <ul class="list-group list-group-flush" style="font-size: 0.85rem;">
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span class="text-muted">Email</span>
+                        <span class="fw-semibold">rajesh.kumar@email.com</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span class="text-muted">Phone</span>
+                        <span class="fw-semibold">+91 98765 43210</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span class="text-muted">DOB</span>
+                        <span class="fw-semibold">14 May 1988</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span class="text-muted">Income</span>
+                        <span class="fw-semibold">₹ 85,000 / mo</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span class="text-muted">Employment</span>
+                        <span class="fw-semibold">Salaried</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                        <span class="text-muted">ID Type</span>
+                        <span class="fw-semibold">PAN Card (BKDPK7849D)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column - Active Loans & KYC Logs -->
+    <div class="col-lg-8">
+        <!-- Active Loans -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="card-title fw-bold text-dark m-0"><i class="fa-solid fa-file-invoice-dollar me-2 text-primary"></i> Associated Loan Applications</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive border-0">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>App ID</th>
+                                <th>Loan Product</th>
+                                <th>Amount</th>
+                                <th>Tenure</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="fw-bold">LOC-9844-32</span></td>
+                                <td>Home Purchase Loan</td>
+                                <td>₹ 4,500,000</td>
+                                <td>180 Months</td>
+                                <td><span class="badge-status badge-status-processing">Under Review</span></td>
+                                <td class="text-end">
+                                    <a href="/Loan/Details/9844" class="btn btn-sm btn-light border"><i class="fa-solid fa-eye text-muted"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="fw-bold">LOC-7788-12</span></td>
+                                <td>Personal Loan</td>
+                                <td>₹ 500,000</td>
+                                <td>36 Months</td>
+                                <td><span class="badge-status badge-status-approved">Approved</span></td>
+                                <td class="text-end">
+                                    <a href="/Loan/Details/7788" class="btn btn-sm btn-light border"><i class="fa-solid fa-eye text-muted"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- KYC Verification Checklist Details -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                <h5 class="card-title fw-bold text-dark m-0"><i class="fa-solid fa-id-card me-2 text-success"></i> KYC Log History</h5>
+                <a href="/Kyc/History/9011" class="btn btn-sm btn-link text-decoration-none">View Complete Audit</a>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;"><i class="fa-solid fa-check small"></i></div>
+                            <div>
+                                <div class="fw-semibold">PAN Card Document Verification</div>
+                                <span class="text-muted small">Matched with Income Tax Dept API</span>
+                            </div>
+                        </div>
+                        <span class="text-success small fw-semibold">Passed (June 10)</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;"><i class="fa-solid fa-check small"></i></div>
+                            <div>
+                                <div class="fw-semibold">Aadhaar Bio-metrics Match</div>
+                                <span class="text-muted small">Matched via UIDAI One-Time OTP</span>
+                            </div>
+                        </div>
+                        <span class="text-success small fw-semibold">Passed (June 10)</span>
+                    </li>
+                    <li class="list-group-item px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;"><i class="fa-solid fa-check small"></i></div>
+                            <div>
+                                <div class="fw-semibold">Address Matching checks</div>
+                                <span class="text-muted small">Utility bills check matched Aadhaar records</span>
+                            </div>
+                        </div>
+                        <span class="text-success small fw-semibold">Passed (June 10)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

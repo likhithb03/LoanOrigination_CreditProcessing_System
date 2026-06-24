@@ -1,0 +1,131 @@
+@{
+    ViewData["Title"] = "Loan Applications";
+    ViewData["CurrentStep"] = "Loan Application";
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-sm-6">
+        <h1 class="h3 fw-bold text-dark m-0">Loan Applications</h1>
+        <p class="text-muted mb-0">Track, manage, and audit loan origination cycles.</p>
+    </div>
+    <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+        <a href="/Loan/Create" class="btn btn-primary px-4 py-2" style="border-radius: var(--radius-md);">
+            <i class="fa-solid fa-plus-circle me-2"></i> Create Loan Application
+        </a>
+    </div>
+</div>
+
+@await Html.PartialAsync("_WorkflowStepper")
+
+<!-- Main Search & Filter Table -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header border-0 bg-white py-3">
+        <div class="row g-3">
+            <div class="col-md-5">
+                <div class="search-bar d-flex align-items-center bg-light px-3 py-1 rounded-pill" style="border: 1px solid var(--border-color);">
+                    <i class="fa-solid fa-magnifying-glass text-muted me-2"></i>
+                    <input type="text" id="loanSearch" class="form-control border-0 bg-transparent py-1 shadow-none" placeholder="Search by App ID, Customer, or Product..." style="font-size: 0.85rem;" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select id="loanStatusFilter" class="form-select bg-light border-0 py-2 shadow-none" style="font-size: 0.85rem; border-radius: 50rem;">
+                    <option value="all">All Application Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="under review">Under Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-body p-0">
+        <div class="table-responsive border-0">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th data-sort="appId">Application ID</th>
+                        <th data-sort="custName">Customer</th>
+                        <th data-sort="product">Loan Product</th>
+                        <th data-sort="amount">Requested Amount</th>
+                        <th data-sort="tenure">Tenure</th>
+                        <th data-sort="status">Workflow Status</th>
+                        <th data-sort="appliedDate">Applied Date</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="loanTableBody">
+                    <!-- Loaded dynamically via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer bg-white border-0 py-3">
+        @await Html.PartialAsync("_Pagination")
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/data-grid.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Mock Loan applications
+            const loansDb = [
+                { appId: "LOC-9844-32", custName: "Rajesh Kumar", product: "Home Purchase Loan", amount: 4500000, tenure: "180 Months", status: "Under Review", appliedDate: "2026-06-10" },
+                { appId: "LOC-7788-12", custName: "Sunitha Rao", product: "Personal Express Loan", amount: 500000, tenure: "36 Months", status: "Approved", appliedDate: "2026-06-12" },
+                { appId: "LOC-4412-99", custName: "Amit Sharma", product: "Commercial Equipment Loan", amount: 1200000, tenure: "60 Months", status: "Pending", appliedDate: "2026-06-15" },
+                { appId: "LOC-2231-08", custName: "Priya Nair", product: "Personal Express Loan", amount: 250000, tenure: "24 Months", status: "Rejected", appliedDate: "2026-06-18" },
+                { appId: "LOC-1155-77", custName: "Vikram Singh", product: "Home Purchase Loan", amount: 6000000, tenure: "240 Months", status: "Completed", appliedDate: "2026-06-20" }
+            ];
+
+            // Render columns
+            const columns = [
+                { key: "appId", renderer: val => `<span class="fw-bold text-dark">${val}</span>` },
+                { key: "custName", renderer: val => `<div class="fw-semibold">${val}</div>` },
+                { key: "product" },
+                { key: "amount", renderer: val => `₹ ${val.toLocaleString('en-IN')}` },
+                { key: "tenure" },
+                { key: "status", renderer: val => {
+                    let badgeClass = "badge-status-pending";
+                    if (val === "Approved" || val === "Completed") badgeClass = "badge-status-approved";
+                    if (val === "Under Review") badgeClass = "badge-status-processing";
+                    if (val === "Rejected") badgeClass = "badge-status-rejected";
+                    return `<span class="badge-status ${badgeClass}">${val}</span>`;
+                }},
+                { key: "appliedDate" }
+            ];
+
+            // Actions Renderer
+            const actionsRenderer = row => {
+                const numericId = row.appId.split('-')[1]; // Extract the central ID
+                
+                // Show role-based specific actions link if needed, but provide general detail view
+                return `
+                    <div class="text-end d-flex gap-2 justify-content-end">
+                        <a href="/Loan/Details/${numericId}" class="btn btn-sm btn-light border" title="View Application Details"><i class="fa-solid fa-eye text-muted"></i></a>
+                        <a href="/Loan/Edit/${numericId}" class="btn btn-sm btn-light border" title="Edit Application"><i class="fa-solid fa-pen-to-square text-muted"></i></a>
+                        
+                        ${row.status === "Pending" ? `<a href="/Kyc/Verify/${numericId}" class="btn btn-sm btn-outline-success" style="font-size: 0.75rem;">Verify KYC</a>` : ''}
+                        ${row.status === "Under Review" ? `<a href="/Approval/Review/${numericId}" class="btn btn-sm btn-outline-primary" style="font-size: 0.75rem;">Underwrite</a>` : ''}
+                    </div>
+                `;
+            };
+
+            // Instantiate
+            new LocalDataGrid({
+                tableBodyId: "loanTableBody",
+                dataset: loansDb,
+                columns: columns,
+                searchInputId: "loanSearch",
+                filterInputs: [
+                    { id: "loanStatusFilter", key: "status" }
+                ],
+                itemsPerPage: 5,
+                initialSortKey: "appliedDate",
+                initialSortOrder: "desc",
+                actionsRenderer: actionsRenderer
+            });
+        });
+    </script>
+}
