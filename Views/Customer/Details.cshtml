@@ -90,12 +90,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                             <tr id="custActiveLoanRow">
                                 <td><span class="fw-bold">LOC-9844-32</span></td>
-                                <td>Home Purchase Loan</td>
-                                <td>₹ 4,500,000</td>
-                                <td>180 Months</td>
-                                <td><span class="badge-status badge-status-processing">Under Review</span></td>
+                                <td id="custLoanType">Home Purchase Loan</td>
+                                <td id="custLoanAmount">₹ 4,500,000</td>
+                                <td id="custLoanTenure">180 Months</td>
+                                <td><span class="badge-status badge-status-processing" id="custLoanStatus">Under Review</span></td>
                                 <td class="text-end">
                                     <a href="/Loan/Details/9844" class="btn btn-sm btn-light border"><i class="fa-solid fa-eye text-muted"></i></a>
                                 </td>
@@ -159,3 +159,41 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loanType = localStorage.getItem("locps_loan_type") || "Home Purchase Loan";
+            const loanAmount = localStorage.getItem("locps_loan_amount") ? parseInt(localStorage.getItem("locps_loan_amount")) : 4500000;
+            const loanTenure = localStorage.getItem("locps_loan_tenure") ? parseInt(localStorage.getItem("locps_loan_tenure")) : 180;
+            const loanStatus = localStorage.getItem("locps_application_state") || "submitted";
+
+            const custLoanType = document.getElementById("custLoanType");
+            if (custLoanType) custLoanType.textContent = loanType;
+
+            const custLoanAmount = document.getElementById("custLoanAmount");
+            if (custLoanAmount) custLoanAmount.textContent = "₹ " + loanAmount.toLocaleString('en-IN');
+
+            const custLoanTenure = document.getElementById("custLoanTenure");
+            if (custLoanTenure) custLoanTenure.textContent = loanTenure + " Months";
+
+            let displayStatus = "Under Review";
+            let badgeClass = "badge-status-processing";
+            if (loanStatus === "approved") {
+                displayStatus = "Approved";
+                badgeClass = "badge-status-approved";
+            } else if (loanStatus === "disbursed") {
+                displayStatus = "Completed";
+                badgeClass = "badge-status-approved";
+            } else if (loanStatus === "rejected") {
+                displayStatus = "Rejected";
+                badgeClass = "badge-status-rejected";
+            }
+            const statusEl = document.getElementById("custLoanStatus");
+            if (statusEl) {
+                statusEl.textContent = displayStatus;
+                statusEl.className = "badge-status " + badgeClass;
+            }
+        });
+    </script>
+}

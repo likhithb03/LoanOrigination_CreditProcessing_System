@@ -11,7 +11,7 @@
             <li class="breadcrumb-item"><a href="/Dashboard" class="text-decoration-none text-muted"><i class="fa-solid fa-house me-1"></i> Home</a></li>
             @if (!string.IsNullOrEmpty(controller) && !controller.Equals("Dashboard", StringComparison.OrdinalIgnoreCase))
             {
-                <li class="breadcrumb-item text-capitalize"><a href="/@controller" class="text-decoration-none text-muted">@controller</a></li>
+                <li class="breadcrumb-item text-capitalize text-muted">@controller</li>
             }
             @if (!string.IsNullOrEmpty(action) && !action.Equals("Index", StringComparison.OrdinalIgnoreCase))
             {

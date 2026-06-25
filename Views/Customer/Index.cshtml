@@ -4,14 +4,9 @@
 }
 
 <div class="row mb-4 align-items-center">
-    <div class="col-sm-6">
+    <div class="col-12">
         <h1 class="h3 fw-bold text-dark m-0">Customer Directory</h1>
-        <p class="text-muted mb-0">Browse and manage registered loan applicants.</p>
-    </div>
-    <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
-        <a href="/Customer/Create" class="btn btn-primary px-4 py-2" style="border-radius: var(--radius-md);">
-            <i class="fa-solid fa-user-plus me-2"></i> Register New Customer
-        </a>
+        <p class="text-muted mb-0">Browse and review registered loan applicants.</p>
     </div>
 </div>
 
@@ -101,9 +96,7 @@
             // Actions Renderer
             const actionsRenderer = row => `
                 <div class="text-end d-flex gap-2 justify-content-end">
-                    <a href="/Customer/Details/${row.id.replace('CUST-', '')}" class="btn btn-sm btn-light border" title="View details"><i class="fa-solid fa-eye text-muted"></i></a>
-                    <a href="/Customer/Edit/${row.id.replace('CUST-', '')}" class="btn btn-sm btn-light border" title="Edit customer"><i class="fa-solid fa-pen-to-square text-muted"></i></a>
-                    <a href="/Loan/Create?customerId=${row.id}" class="btn btn-sm btn-outline-primary" style="font-size: 0.75rem;">Apply Loan</a>
+                    <a href="/Customer/Details/${row.id.replace('CUST-', '')}" class="btn btn-sm btn-light border" title="View details"><i class="fa-solid fa-eye text-muted me-1"></i> View Profile</a>
                 </div>
             `;
 

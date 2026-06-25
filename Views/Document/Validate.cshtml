@@ -82,6 +82,9 @@
         function setDocStatus(idx, status) {
             validationDocs[idx].status = status;
             renderValidationTable();
+            if (window.logWorkflowAction) {
+                window.logWorkflowAction(status === "Accepted" ? "Document Approval" : "Document Rejection", validationDocs[idx].name);
+            }
             const type = status === "Accepted" ? "success" : "warning";
             showToast("Status Updated", `${validationDocs[idx].name} marked as <strong>${status}</strong>.`, type);
         }
@@ -89,12 +92,17 @@
         function approveAllDocs() {
             showConfirmationModal(
                 "Approve All Documents?",
-                "Marking all documents as accepted will forward the application to the underwriting queue. Are you sure?",
+                "Marking all documents as accepted will forward the application to the Credit Evaluation step. Are you sure?",
                 function() {
                     validationDocs.forEach(d => d.status = "Accepted");
                     renderValidationTable();
-                    showToast("Documents Approved", "All documents accepted. Application forwarded for underwriting review.", "success");
-                    setTimeout(() => { window.location.href = "/Approval/Review/9844"; }, 1500);
+                    localStorage.setItem("locps_application_state", "verified_docs");
+                    if (window.logWorkflowAction) {
+                        window.logWorkflowAction("Document Verification", "LOC-9844-32");
+                        window.logWorkflowAction("Document Approval", "All Documents (LOC-9844-32)");
+                    }
+                    showToast("Documents Approved", "All documents accepted. Proceeding to credit evaluation.", "success");
+                    setTimeout(() => { window.location.href = "/Credit/Evaluate/9844"; }, 1500);
                 }
             );
         }

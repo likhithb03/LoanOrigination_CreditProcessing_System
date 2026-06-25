@@ -28,3 +28,4 @@ C:\Projects\Locps_V1.1\LOCPS\obj\Debug\net8.0\refint\LOCPS.dll
 C:\Projects\Locps_V1.1\LOCPS\obj\Debug\net8.0\LOCPS.pdb
 C:\Projects\Locps_V1.1\LOCPS\obj\Debug\net8.0\LOCPS.genruntimeconfig.cache
 C:\Projects\Locps_V1.1\LOCPS\obj\Debug\net8.0\ref\LOCPS.dll
+C:\Projects\Locps_V1.1\LOCPS\obj\Debug\net8.0\LOCPS.sourcelink.json

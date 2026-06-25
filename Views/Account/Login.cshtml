@@ -118,6 +118,10 @@
                                 <i class="fa-solid fa-right-to-bracket me-2"></i> Log In as Customer
                             </button>
                         </form>
+                        <div class="mt-3 text-center">
+                            <span class="text-muted small">Don't have an account? </span>
+                            <a href="/Account/Register" class="text-primary small fw-semibold text-decoration-none">Sign up here</a>
+                        </div>
                     </div>
 
                     <!-- STAFF PORTAL TAB -->
@@ -186,6 +190,21 @@
             localStorage.setItem("locps_preselected_type", type);
         }
 
+        document.addEventListener("DOMContentLoaded", function () {
+            const registeredEmail = localStorage.getItem("locps_registered_email");
+            if (registeredEmail) {
+                const emailInput = document.getElementById("custEmail");
+                if (emailInput) {
+                    emailInput.value = registeredEmail;
+                }
+                localStorage.removeItem("locps_registered_email");
+            }
+        });
+
+        function syncCookie(role) {
+            document.cookie = "locps_demo_role=" + role + "; path=/; max-age=31536000; SameSite=Lax";
+        }
+
         function handleLogin(e, defaultRole) {
             e.preventDefault();
             const activeTabPane = document.querySelector(".tab-pane.active");
@@ -194,6 +213,7 @@
             submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Authenticating...';
 
             localStorage.setItem("locps_demo_role", defaultRole);
+            syncCookie(defaultRole);
             
             setTimeout(() => {
                 redirectUser();
@@ -202,6 +222,7 @@
 
         function quickLogin(role) {
             localStorage.setItem("locps_demo_role", role);
+            syncCookie(role);
             redirectUser();
         }
 

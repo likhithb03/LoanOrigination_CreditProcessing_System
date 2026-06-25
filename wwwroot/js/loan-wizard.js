@@ -33,6 +33,28 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // 1.5. Edit page pre-fill
+    const isEditPage = window.location.pathname.toLowerCase().includes("/loan/edit");
+    if (isEditPage) {
+        const savedProduct = localStorage.getItem("locps_loan_type");
+        const savedAmount = localStorage.getItem("locps_loan_amount");
+        const savedRate = localStorage.getItem("locps_loan_rate");
+        const savedTenure = localStorage.getItem("locps_loan_tenure");
+
+        if (savedProduct && productSelect) {
+            productSelect.value = savedProduct;
+        }
+        if (savedAmount && amountSlider) {
+            amountSlider.value = savedAmount;
+        }
+        if (savedRate && rateSlider) {
+            rateSlider.value = savedRate;
+        }
+        if (savedTenure && tenureSlider) {
+            tenureSlider.value = savedTenure;
+        }
+    }
+
     // 2. Query/Storage Pre-selection for Product Type
     const urlParams = new URLSearchParams(window.location.search);
     let productType = urlParams.get('type') || localStorage.getItem("locps_preselected_type");
@@ -182,6 +204,22 @@ function handleWizardSubmit(e) {
     if (!declCheck.checked) {
         showToast("Agreement Required", "Please review and check the declaration statement.", "warning");
         return;
+    }
+
+    // Save wizard details
+    const productSelect = document.getElementById("wizardProduct");
+    const amountSlider = document.getElementById("loanAmountSlider");
+    const rateSlider = document.getElementById("loanRateSlider");
+    const tenureSlider = document.getElementById("loanTenureSlider");
+
+    if (productSelect) localStorage.setItem("locps_loan_type", productSelect.value);
+    if (amountSlider) localStorage.setItem("locps_loan_amount", amountSlider.value);
+    if (rateSlider) localStorage.setItem("locps_loan_rate", rateSlider.value);
+    if (tenureSlider) localStorage.setItem("locps_loan_tenure", tenureSlider.value);
+    // Reset state to submitted
+    localStorage.setItem("locps_application_state", "submitted");
+    if (window.logWorkflowAction) {
+        window.logWorkflowAction("Loan Application Submission", "LOC-9844-32");
     }
 
     btnNext.disabled = true;

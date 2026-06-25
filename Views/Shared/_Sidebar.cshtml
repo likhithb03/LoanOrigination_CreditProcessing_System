@@ -1,3 +1,7 @@
+@{
+    var activeRole = Context.Request.Cookies["locps_demo_role"] ?? "officer";
+}
+
 <aside id="sidebar">
     <div class="sidebar-header">
         <a href="/Dashboard" class="brand-logo">
@@ -19,93 +23,105 @@
             </a>
         </div>
 
-        <!-- Customer Portal Menu -->
-        <div class="nav-section" data-role="customer">
-            <div class="nav-heading">My Services</div>
-            <a href="/Dashboard" class="nav-link-item" id="nav-cust-dashboard">
-                <i class="fa-solid fa-table-columns"></i>
-                My Portal
-            </a>
-            <a href="/Loan/Create" class="nav-link-item" id="nav-cust-apply">
-                <i class="fa-solid fa-file-signature"></i>
-                Apply for Loan
-            </a>
-        </div>
+        @if (activeRole == "customer")
+        {
+            <!-- Customer Portal Menu -->
+            <div class="nav-section" data-role="customer">
+                <div class="nav-heading">My Services</div>
+                <a href="/Dashboard" class="nav-link-item" id="nav-cust-dashboard">
+                    <i class="fa-solid fa-table-columns"></i>
+                    My Portal
+                </a>
+                <a href="/Loan/Create" class="nav-link-item" id="nav-cust-apply">
+                    <i class="fa-solid fa-file-signature"></i>
+                    Apply for Loan
+                </a>
+            </div>
+        }
 
-        <!-- Loan Officer Worklist -->
-        <div class="nav-section" data-role="officer">
-            <div class="nav-heading">Customers & Loans</div>
-            <a href="/Customer" class="nav-link-item" id="nav-customers">
-                <i class="fa-solid fa-users"></i>
-                Customer Directory
-            </a>
-            <a href="/Customer/Create" class="nav-link-item" id="nav-new-customer">
-                <i class="fa-solid fa-user-plus"></i>
-                Register Customer
-            </a>
-            <a href="/Loan" class="nav-link-item" id="nav-loans">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-                Loan Applications
-            </a>
-            <a href="/Loan/Create" class="nav-link-item" id="nav-new-loan">
-                <i class="fa-solid fa-plus-circle"></i>
-                New Application
-            </a>
-            
-            <div class="nav-heading">Origination Steps</div>
-            <a href="/Kyc/Verify/1001" class="nav-link-item" id="nav-kyc">
-                <i class="fa-solid fa-id-card"></i>
-                KYC Verification
-            </a>
-            <a href="/Credit/Evaluate/1001" class="nav-link-item" id="nav-credit">
-                <i class="fa-solid fa-gauge-high"></i>
-                Credit Evaluation
-            </a>
-            <a href="/Document/Upload/1001" class="nav-link-item" id="nav-documents">
-                <i class="fa-solid fa-file-arrow-up"></i>
-                Document Management
-            </a>
-        </div>
+        @if (activeRole == "officer")
+        {
+            <!-- Loan Officer Worklist -->
+            <div class="nav-section" data-role="officer">
+                <div class="nav-heading">Customers & Loans</div>
+                <a href="/Customer" class="nav-link-item" id="nav-customers">
+                    <i class="fa-solid fa-users"></i>
+                    Customer Directory
+                </a>
+                <a href="/Loan" class="nav-link-item" id="nav-loans">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    Loan Applications
+                </a>
+                
+                <div class="nav-heading">Origination Steps</div>
+                <a href="/Kyc/Verify/9844" class="nav-link-item" id="nav-kyc">
+                    <i class="fa-solid fa-id-card"></i>
+                    KYC Verification
+                </a>
+                <a href="/Credit/Evaluate/9844" class="nav-link-item" id="nav-credit">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    Credit Evaluation
+                </a>
+                <a href="/Document/Validate/9844" class="nav-link-item" id="nav-doc-validate">
+                    <i class="fa-solid fa-file-shield"></i>
+                    Document Validation
+                </a>
+            </div>
+        }
 
-        <!-- Underwriter Operations -->
-        <div class="nav-section" data-role="underwriter">
-            <div class="nav-heading">Credit Decisioning</div>
-            <a href="/Approval/Review/1001" class="nav-link-item" id="nav-underwrite">
-                <i class="fa-solid fa-signature"></i>
-                Underwriter Review
-            </a>
-        </div>
+        @if (activeRole == "underwriter")
+        {
+            <!-- Underwriter Operations -->
+            <div class="nav-section" data-role="underwriter">
+                <div class="nav-heading">Credit Decisioning</div>
+                <a href="/Approval/Review/9844" class="nav-link-item" id="nav-underwrite">
+                    <i class="fa-solid fa-signature"></i>
+                    Underwriter Review
+                </a>
+                <a href="/Disbursement/Create/9844" class="nav-link-item" id="nav-disburse-initiate">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                    Initiate Disbursement
+                </a>
+                <a href="/Disbursement/History" class="nav-link-item" id="nav-disbursements">
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+                    Disbursement History
+                </a>
+            </div>
+        }
 
-        <!-- Admin Configuration & Management -->
-        <div class="nav-section" data-role="admin">
-            <div class="nav-heading">Administration</div>
-            <a href="/Product" class="nav-link-item" id="nav-products">
-                <i class="fa-solid fa-box-archive"></i>
-                Loan Products
-            </a>
-            <a href="/UserManagement" class="nav-link-item" id="nav-users">
-                <i class="fa-solid fa-user-shield"></i>
-                User Management
-            </a>
-            <a href="/Settings/ScoringRules" class="nav-link-item" id="nav-scoring">
-                <i class="fa-solid fa-sliders"></i>
-                Scoring Engine Weights
-            </a>
-            
-            <div class="nav-heading">Settlement & Reports</div>
-            <a href="/Disbursement/History" class="nav-link-item" id="nav-disbursements">
-                <i class="fa-solid fa-hand-holding-dollar"></i>
-                Disbursements
-            </a>
-            <a href="/Reports" class="nav-link-item" id="nav-reports">
-                <i class="fa-solid fa-chart-line"></i>
-                Reports & Analytics
-            </a>
-            <a href="/Settings" class="nav-link-item" id="nav-settings">
-                <i class="fa-solid fa-gears"></i>
-                System Settings
-            </a>
-        </div>
+        @if (activeRole == "admin")
+        {
+            <!-- Admin Configuration & Management -->
+            <div class="nav-section" data-role="admin">
+                <div class="nav-heading">Administration</div>
+                <a href="/Product" class="nav-link-item" id="nav-products">
+                    <i class="fa-solid fa-box-archive"></i>
+                    Loan Products
+                </a>
+                <a href="/UserManagement" class="nav-link-item" id="nav-users">
+                    <i class="fa-solid fa-user-shield"></i>
+                    User Management
+                </a>
+                <a href="/Settings/ScoringRules" class="nav-link-item" id="nav-scoring">
+                    <i class="fa-solid fa-sliders"></i>
+                    Scoring Engine Weights
+                </a>
+                <a href="/Settings/AuditLogs" class="nav-link-item" id="nav-auditlogs">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Audit Log Trail
+                </a>
+                
+                <div class="nav-heading">Settlement & Reports</div>
+                <a href="/Disbursement/History" class="nav-link-item" id="nav-disbursements-admin">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                    Disbursements
+                </a>
+                <a href="/Reports" class="nav-link-item" id="nav-reports">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Reports & Analytics
+                </a>
+            </div>
+        }
     </div>
     
     <div class="sidebar-footer">
@@ -113,7 +129,7 @@
             <label class="text-white-50 small d-block mb-1">Current Demo Role</label>
             <select id="roleSelector" class="form-select role-dropdown-select w-100">
                 <option value="customer">Customer</option>
-                <option value="officer" selected>Loan Officer</option>
+                <option value="officer">Loan Officer</option>
                 <option value="underwriter">Underwriter</option>
                 <option value="admin">System Admin</option>
             </select>

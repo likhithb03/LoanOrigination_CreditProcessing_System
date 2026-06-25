@@ -23,6 +23,9 @@ function verifyPanCard() {
         icon.className = "fa-solid fa-check";
         
         panPassed = true;
+        if (window.logWorkflowAction) {
+            window.logWorkflowAction("PAN Card Check Passed", "Rajesh Kumar (BKDPK7849D)");
+        }
         showToast("PAN Card Match", "Database check matched with PAN registry for Rajesh Kumar.", "success");
         checkAllPassed();
     }, 1200);
@@ -75,6 +78,9 @@ function verifyAadhaarOtp() {
         icon.className = "fa-solid fa-check";
         
         aadhaarPassed = true;
+        if (window.logWorkflowAction) {
+            window.logWorkflowAction("Aadhaar Biometric Check Passed", "Rajesh Kumar");
+        }
         showToast("Aadhaar OTP Verified", "UIDAI Biometric authentication completed successfully.", "success");
         checkAllPassed();
     }, 1200);
@@ -101,6 +107,9 @@ function verifyAddress() {
         icon.className = "fa-solid fa-check";
         
         addressPassed = true;
+        if (window.logWorkflowAction) {
+            window.logWorkflowAction("Address Match Check Passed", "Rajesh Kumar Address");
+        }
         showToast("Address Match Passed", "Geographical checks and utility bills match index registered.", "success");
         checkAllPassed();
     }, 1200);
@@ -122,6 +131,9 @@ function submitKycCompliance() {
     btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Saving Results...`;
 
     setTimeout(() => {
+        if (window.logWorkflowAction) {
+            window.logWorkflowAction("KYC Submission", "CUST-9011");
+        }
         showToast("KYC Compliance Completed", "Customer has been marked as fully KYC compliant.", "success");
         setTimeout(() => {
             // Proceed to next logical workflow step: Credit Evaluation

@@ -108,6 +108,16 @@
     <script>
         function handleEditSubmit(e) {
             e.preventDefault();
+            const productSelect = document.getElementById("wizardProduct");
+            const amountSlider = document.getElementById("loanAmountSlider");
+            const rateSlider = document.getElementById("loanRateSlider");
+            const tenureSlider = document.getElementById("loanTenureSlider");
+
+            if (productSelect) localStorage.setItem("locps_loan_type", productSelect.value);
+            if (amountSlider) localStorage.setItem("locps_loan_amount", amountSlider.value);
+            if (rateSlider) localStorage.setItem("locps_loan_rate", rateSlider.value);
+            if (tenureSlider) localStorage.setItem("locps_loan_tenure", tenureSlider.value);
+
             const btn = document.getElementById("btnEditSubmit");
             btn.disabled = true;
             btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Saving...`;

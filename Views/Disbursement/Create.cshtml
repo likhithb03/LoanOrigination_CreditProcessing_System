@@ -94,7 +94,7 @@
                     <button class="btn btn-success px-4 py-2" onclick="initiateDisbursement()">
                         <i class="fa-solid fa-paper-plane me-2"></i> Confirm & Disburse
                     </button>
-                    <a href="/Loan" class="btn btn-light border px-4 py-2">Cancel</a>
+                    <a href="/Dashboard" class="btn btn-light border px-4 py-2">Cancel</a>
                 </div>
             </div>
         </div>
@@ -108,13 +108,13 @@
             <div class="card-body pt-0" style="font-size: 0.875rem;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item px-0 py-3 d-flex justify-content-between">
-                        <span class="text-muted">Sanctioned Amount</span><span class="fw-bold text-success">₹ 45,00,000</span>
+                        <span class="text-muted">Sanctioned Amount</span><span class="fw-bold text-success" id="disbSanctioned">₹ 45,00,000</span>
                     </li>
                     <li class="list-group-item px-0 py-3 d-flex justify-content-between">
-                        <span class="text-muted">Processing Fee (0.25%)</span><span class="fw-semibold text-danger">- ₹ 11,250</span>
+                        <span class="text-muted">Processing Fee (0.25%)</span><span class="fw-semibold text-danger" id="disbFee">- ₹ 11,250</span>
                     </li>
                     <li class="list-group-item px-0 py-3 d-flex justify-content-between border-top">
-                        <span class="fw-bold text-dark">Net Transfer Amount</span><span class="fw-bold text-primary">₹ 44,88,750</span>
+                        <span class="fw-bold text-dark">Net Transfer Amount</span><span class="fw-bold text-primary" id="disbNet">₹ 44,88,750</span>
                     </li>
                     <li class="list-group-item px-0 py-3 d-flex justify-content-between">
                         <span class="text-muted">First EMI Due</span><span class="fw-semibold">August 1, 2026</span>
@@ -127,12 +127,35 @@
 
 @section Scripts {
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loanAmount = localStorage.getItem("locps_loan_amount") ? parseInt(localStorage.getItem("locps_loan_amount")) : 4500000;
+            const fee = Math.round(loanAmount * 0.0025);
+            const net = loanAmount - fee;
+
+            const disbSanctioned = document.getElementById("disbSanctioned");
+            if (disbSanctioned) disbSanctioned.textContent = "₹ " + loanAmount.toLocaleString('en-IN');
+
+            const disbFee = document.getElementById("disbFee");
+            if (disbFee) disbFee.textContent = "- ₹ " + fee.toLocaleString('en-IN');
+
+            const disbNet = document.getElementById("disbNet");
+            if (disbNet) disbNet.textContent = "₹ " + net.toLocaleString('en-IN');
+        });
+
         function initiateDisbursement() {
+            const loanAmount = localStorage.getItem("locps_loan_amount") ? parseInt(localStorage.getItem("locps_loan_amount")) : 4500000;
+            const fee = Math.round(loanAmount * 0.0025);
+            const net = loanAmount - fee;
+
             showConfirmationModal(
                 "Confirm Disbursement",
-                "This will initiate a bank transfer of <strong>₹ 44,88,750</strong> to the applicant's registered account. Proceed?",
+                "This will initiate a bank transfer of <strong>₹ " + net.toLocaleString('en-IN') + "</strong> to the applicant's registered account. Proceed?",
                 function () {
-                    showToast("Disbursement Initiated", "Transfer of ₹ 44,88,750 queued for processing. Ref #DBR-20260624-9844.", "success");
+                    localStorage.setItem("locps_application_state", "disbursed");
+                    if (window.logWorkflowAction) {
+                        window.logWorkflowAction("Loan Disbursement", "LOC-9844-32");
+                    }
+                    showToast("Disbursement Initiated", "Transfer of ₹ " + net.toLocaleString('en-IN') + " queued for processing. Ref #DBR-20260624-9844.", "success");
                     setTimeout(() => { window.location.href = "/Disbursement/History"; }, 1500);
                 }
             );

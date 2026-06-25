@@ -1,49 +1,58 @@
 @{
     var steps = new[] {
-        "Dashboard", 
-        "Customer Registration", 
-        "Loan Application", 
-        "KYC Verification", 
-        "Credit Evaluation", 
-        "Document Upload", 
-        "Document Validation", 
-        "Underwriter Review", 
-        "Approve/Reject", 
-        "Disbursement", 
-        "Completed"
+        "Submission", 
+        "Verification", 
+        "Credit Scoring", 
+        "Underwriting", 
+        "Disbursement"
     };
     var currentStep = ViewData["CurrentStep"] as string ?? "";
-    var currentIndex = Array.IndexOf(steps, currentStep);
+    var currentIndex = 0; // Default to first step
     
-    // Fallback search matches to simplify usage
-    if (currentIndex == -1 && !string.IsNullOrEmpty(currentStep)) {
-        if (currentStep.Contains("Dashboard")) currentIndex = 0;
-        else if (currentStep.Contains("Registration") || currentStep.Contains("Customer")) currentIndex = 1;
-        else if (currentStep.Contains("Application") || currentStep.Contains("Loan")) currentIndex = 2;
-        else if (currentStep.Contains("KYC") || currentStep.Contains("Verify")) currentIndex = 3;
-        else if (currentStep.Contains("Credit") || currentStep.Contains("Evaluate")) currentIndex = 4;
-        else if (currentStep.Contains("Upload")) currentIndex = 5;
-        else if (currentStep.Contains("Validate")) currentIndex = 6;
-        else if (currentStep.Contains("Review") || currentStep.Contains("Approval")) currentIndex = 7;
-        else if (currentStep.Contains("Decision") || currentStep.Contains("Approve") || currentStep.Contains("Reject")) currentIndex = 8;
-        else if (currentStep.Contains("Disbursement")) currentIndex = 9;
-        else if (currentStep.Contains("Completed")) currentIndex = 10;
+    if (!string.IsNullOrEmpty(currentStep)) {
+        var lowerStep = currentStep.ToLower();
+        if (lowerStep.Contains("registration") || lowerStep.Contains("loan") || lowerStep.Contains("upload") || lowerStep.Contains("submission")) {
+            currentIndex = 0;
+        }
+        else if (lowerStep.Contains("kyc") || lowerStep.Contains("verify") || lowerStep.Contains("validate") || lowerStep.Contains("verification")) {
+            currentIndex = 1;
+        }
+        else if (lowerStep.Contains("credit") || lowerStep.Contains("evaluate") || lowerStep.Contains("score") || lowerStep.Contains("scoring")) {
+            currentIndex = 2;
+        }
+        else if (lowerStep.Contains("review") || lowerStep.Contains("approval") || lowerStep.Contains("decision") || lowerStep.Contains("approve") || lowerStep.Contains("reject") || lowerStep.Contains("underwrite")) {
+            currentIndex = 3;
+        }
+        else if (lowerStep.Contains("disburse") || lowerStep.Contains("disbursement") || lowerStep.Contains("complete") || lowerStep.Contains("history")) {
+            currentIndex = 4;
+        }
     }
 }
 
 <div class="card border-0 shadow-sm mb-4">
-    <div class="card-body py-3">
+    <div class="card-body py-4">
         <div class="stepper-container">
-            <div class="stepper">
+            <div class="stepper" style="min-width: auto;">
                 @for (int i = 0; i < steps.Length; i++)
                 {
                     var stepClass = "";
-                    if (i < currentIndex) stepClass = "completed";
-                    else if (i == currentIndex) stepClass = "active";
-                    
                     var iconHtml = "";
-                    if (i < currentIndex) iconHtml = "<i class=\"fa-solid fa-check\"></i>";
-                    else iconHtml = (i + 1).ToString();
+                    
+                    if (i < currentIndex) 
+                    {
+                        stepClass = "completed";
+                        iconHtml = "<i class=\"fa-solid fa-check fs-6\"></i>";
+                    }
+                    else if (i == currentIndex) 
+                    {
+                        stepClass = "active";
+                        iconHtml = $"<span class=\"fw-bold\">{i + 1}</span>";
+                    }
+                    else 
+                    {
+                        stepClass = "text-muted";
+                        iconHtml = $"<span>{i + 1}</span>";
+                    }
 
                     <div class="step-item @stepClass">
                         <div class="step-circle">@Html.Raw(iconHtml)</div>

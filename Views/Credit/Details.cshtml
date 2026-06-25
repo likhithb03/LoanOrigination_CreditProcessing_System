@@ -21,7 +21,7 @@
     <div class="col-lg-8">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white border-0 py-3">
-                <h5 class="card-title fw-bold text-dark m-0"><i class="fa-solid fa-square-poll-vertical text-primary me-2"></i> Scoring Engine Scorecard (Tier A Eligible)</h5>
+                <h5 class="card-title fw-bold text-dark m-0" id="cardTitleHeader"><i class="fa-solid fa-square-poll-vertical text-primary me-2"></i> Scoring Engine Scorecard (Tier A Eligible)</h5>
             </div>
             
             <div class="card-body p-0">
@@ -39,10 +39,10 @@
                         <tbody>
                             <tr>
                                 <td><span class="fw-bold">Bureau Score (CIBIL)</span></td>
-                                <td>785 / 900</td>
+                                <td id="detCibilValue">785 / 900</td>
                                 <td>35%</td>
-                                <td>275 / 315</td>
-                                <td><span class="badge bg-success text-white">Excellent</span></td>
+                                <td id="detCibilWeight">275 / 315</td>
+                                <td><span class="badge bg-success text-white" id="detCibilStatus">Excellent</span></td>
                             </tr>
                             <tr>
                                 <td><span class="fw-bold">Debt-to-Income (DTI)</span></td>
@@ -76,8 +76,8 @@
                                 <td>Weighted Total Score</td>
                                 <td>-</td>
                                 <td>100%</td>
-                                <td>810 / 900</td>
-                                <td>Passed</td>
+                                <td id="detTotalScore">810 / 900</td>
+                                <td id="detTotalStatus">Passed</td>
                             </tr>
                         </tbody>
                     </table>
@@ -90,8 +90,8 @@
         <div class="card border-0 shadow-sm bg-light text-dark">
             <div class="card-body">
                 <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-shield-halved text-success me-2"></i> Pricing Matrix Tiering</h6>
-                <p class="small text-muted mb-3">Based on scorecard results, the applicant falls under Pricing Category <strong>Tier A (Prime Interest Rates)</strong>.</p>
-                <ul class="small ps-3 mb-0" style="line-height: 1.6;">
+                <p class="small text-muted mb-3" id="pricingMatrixDesc">Based on scorecard results, the applicant falls under Pricing Category <strong>Tier A (Prime Interest Rates)</strong>.</p>
+                <ul class="small ps-3 mb-0" style="line-height: 1.6;" id="pricingMatrixRules">
                     <li class="mb-2"><strong>Base Rate Modifier:</strong> -0.5% adjustment applied.</li>
                     <li class="mb-2"><strong>Processing Fee:</strong> 0.25% of loan volume.</li>
                     <li><strong>Co-sign Requirement:</strong> Waived.</li>
@@ -100,3 +100,110 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const score = parseInt(localStorage.getItem("locps_credit_score_9844") || "785");
+            
+            // Calculate CIBIL weighted parts
+            const cibilWeight = Math.round(score * 0.35);
+            const totalScore = cibilWeight + 535; // 210 (DTI) + 135 (Age) + 120 (Consistency) + 70 (Utilization)
+            
+            // Determine tier, status, and pricing rules
+            let tier = "Tier A";
+            let cibilStatusText = "Excellent";
+            let cibilStatusClass = "bg-success";
+            let totalStatusText = "Passed";
+            
+            let matrixDesc = `Based on scorecard results, the applicant falls under Pricing Category <strong>Tier A (Prime Interest Rates)</strong>.`;
+            let matrixRulesHtml = `
+                <li class="mb-2"><strong>Base Rate Modifier:</strong> -0.5% adjustment applied.</li>
+                <li class="mb-2"><strong>Processing Fee:</strong> 0.25% of loan volume.</li>
+                <li><strong>Co-sign Requirement:</strong> Waived.</li>
+            `;
+            
+            if (score >= 750) {
+                tier = "Tier A";
+                cibilStatusText = "Excellent";
+                cibilStatusClass = "bg-success";
+                totalStatusText = "Passed";
+            } else if (score >= 700) {
+                tier = "Tier B";
+                cibilStatusText = "Good";
+                cibilStatusClass = "bg-info text-white";
+                totalStatusText = "Passed";
+                matrixDesc = `Based on scorecard results, the applicant falls under Pricing Category <strong>Tier B (Preferred Interest Rates)</strong>.`;
+                matrixRulesHtml = `
+                    <li class="mb-2"><strong>Base Rate Modifier:</strong> -0.2% adjustment applied.</li>
+                    <li class="mb-2"><strong>Processing Fee:</strong> 0.35% of loan volume.</li>
+                    <li><strong>Co-sign Requirement:</strong> Waived.</li>
+                `;
+            } else if (score >= 600) {
+                tier = "Tier C";
+                cibilStatusText = "Fair";
+                cibilStatusClass = "bg-warning text-dark";
+                totalStatusText = "Passed With Conditions";
+                matrixDesc = `Based on scorecard results, the applicant falls under Pricing Category <strong>Tier C (Standard Interest Rates)</strong>.`;
+                matrixRulesHtml = `
+                    <li class="mb-2"><strong>Base Rate Modifier:</strong> No adjustment applied.</li>
+                    <li class="mb-2"><strong>Processing Fee:</strong> 0.50% of loan volume.</li>
+                    <li><strong>Co-sign Requirement:</strong> Required if DTI exceeds 35%.</li>
+                `;
+            } else {
+                tier = "Tier D";
+                cibilStatusText = "Poor";
+                cibilStatusClass = "bg-danger text-white";
+                totalStatusText = "Declined";
+                matrixDesc = `Based on scorecard results, the applicant falls under Pricing Category <strong>Tier D (Subprime Interest Rates / Declined)</strong>.`;
+                matrixRulesHtml = `
+                    <li class="mb-2"><strong>Base Rate Modifier:</strong> +1.0% risk premium adjustment.</li>
+                    <li class="mb-2"><strong>Processing Fee:</strong> 1.00% of loan volume.</li>
+                    <li><strong>Co-sign Requirement:</strong> Mandatory co-signer required.</li>
+                `;
+            }
+            
+            // Update Card Header
+            const cardTitleHeader = document.getElementById("cardTitleHeader");
+            if (cardTitleHeader) {
+                cardTitleHeader.innerHTML = `<i class="fa-solid fa-square-poll-vertical text-primary me-2"></i> Scoring Engine Scorecard (${tier} Eligible)`;
+            }
+            
+            // Update CIBIL Score row
+            const detCibilValue = document.getElementById("detCibilValue");
+            if (detCibilValue) detCibilValue.textContent = `${score} / 900`;
+            
+            const detCibilWeight = document.getElementById("detCibilWeight");
+            if (detCibilWeight) detCibilWeight.textContent = `${cibilWeight} / 315`;
+            
+            const detCibilStatus = document.getElementById("detCibilStatus");
+            if (detCibilStatus) {
+                detCibilStatus.textContent = cibilStatusText;
+                detCibilStatus.className = `badge ${cibilStatusClass}`;
+            }
+            
+            // Update Total Score row
+            const detTotalScore = document.getElementById("detTotalScore");
+            if (detTotalScore) detTotalScore.textContent = `${totalScore} / 900`;
+            
+            const detTotalStatus = document.getElementById("detTotalStatus");
+            if (detTotalStatus) {
+                detTotalStatus.textContent = totalStatusText;
+                if (totalStatusText === "Declined") {
+                    detTotalStatus.className = "text-danger fw-bold";
+                } else if (totalStatusText.includes("Conditions")) {
+                    detTotalStatus.className = "text-warning fw-bold";
+                } else {
+                    detTotalStatus.className = "text-success fw-bold";
+                }
+            }
+            
+            // Update Pricing Matrix
+            const pricingMatrixDesc = document.getElementById("pricingMatrixDesc");
+            if (pricingMatrixDesc) pricingMatrixDesc.innerHTML = matrixDesc;
+            
+            const pricingMatrixRules = document.getElementById("pricingMatrixRules");
+            if (pricingMatrixRules) pricingMatrixRules.innerHTML = matrixRulesHtml;
+        });
+    </script>
+}

@@ -1,3 +1,16 @@
+@{
+    var activeRole = Context.Request.Cookies["locps_demo_role"] ?? "officer";
+    
+    // Server-side profile helper to prevent UI flashes
+    var initials = "LO";
+    var fullName = "Likhith Kumar";
+    var roleLabel = "Loan Officer";
+    
+    if (activeRole == "customer") { initials = "RK"; fullName = "Rajesh Kumar"; roleLabel = "Portal Customer"; }
+    else if (activeRole == "underwriter") { initials = "UW"; fullName = "Anjali Sharma"; roleLabel = "Senior Underwriter"; }
+    else if (activeRole == "admin") { initials = "SA"; fullName = "System Administrator"; roleLabel = "Super Admin"; }
+}
+
 <header id="topbar">
     <div class="d-flex align-items-center gap-3">
         <button class="toggle-sidebar-btn" id="toggleSidebar" aria-label="Toggle Sidebar">
@@ -14,7 +27,7 @@
         <div class="dropdown">
             <button class="btn btn-link position-relative text-muted p-2 border-0 shadow-none" type="button" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-regular fa-bell fs-5"></i>
-                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger border border-light" id="notifBadge" style="font-size: 0.6rem;">3</span>
+                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger border border-light" id="notifBadge" style="font-size: 0.6rem;">0</span>
             </button>
             <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-0" aria-labelledby="notifDropdown" style="width: 320px; font-size: 0.85rem;">
                 <div class="p-3 border-bottom d-flex align-items-center justify-content-between bg-light">
@@ -22,27 +35,7 @@
                     <a href="/Notification" class="text-primary text-decoration-none small">View All</a>
                 </div>
                 <div id="notificationList" class="list-group list-group-flush" style="max-height: 240px; overflow-y: auto;">
-                    <a href="/Kyc/Verify/1001" class="list-group-item list-group-item-action p-3">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="fw-semibold text-dark">KYC Uploaded</span>
-                            <span class="text-muted small text-nowrap">2m ago</span>
-                        </div>
-                        <p class="mb-0 text-muted small">Customer 'Rajesh Kumar' uploaded verification docs.</p>
-                    </a>
-                    <a href="/Approval/Review/1001" class="list-group-item list-group-item-action p-3">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="fw-semibold text-dark">Ready for Underwriting</span>
-                            <span class="text-muted small text-nowrap">15m ago</span>
-                        </div>
-                        <p class="mb-0 text-muted small">Application #LOC-9844-32 has passed Credit Score thresholds.</p>
-                    </a>
-                    <a href="/Disbursement/Create/1001" class="list-group-item list-group-item-action p-3">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="fw-semibold text-dark">Disbursement Pending</span>
-                            <span class="text-muted small text-nowrap">1h ago</span>
-                        </div>
-                        <p class="mb-0 text-muted small">Approved application #LOC-7788-12 needs payment processing.</p>
-                    </a>
+                    <!-- Populated dynamically based on role -->
                 </div>
                 <div class="p-2 border-top text-center bg-light">
                     <button class="btn btn-sm btn-link text-muted text-decoration-none w-100" onclick="clearNotifications()">Clear All</button>
@@ -55,19 +48,77 @@
         <!-- Profile Dropdown -->
         <div class="dropdown">
             <button class="btn btn-link d-flex align-items-center gap-2 text-decoration-none text-dark p-1 border-0 shadow-none" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: 700;" id="userProfileInitials">LO</div>
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: 700;" id="userProfileInitials">@initials</div>
                 <div class="text-start d-none d-sm-block">
-                    <div class="fw-semibold lh-1" style="font-size: 0.85rem;" id="userProfileName">Likhith Kumar</div>
-                    <span class="text-muted small" style="font-size: 0.75rem;" id="userProfileRole">Loan Officer</span>
+                    <div class="fw-semibold lh-1" style="font-size: 0.85rem;" id="userProfileName">@fullName</div>
+                    <span class="text-muted small" style="font-size: 0.75rem;" id="userProfileRole">@roleLabel</span>
                 </div>
                 <i class="fa-solid fa-chevron-down text-muted small"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="profileDropdown">
                 <li><a class="dropdown-item py-2" href="/Settings"><i class="fa-solid fa-user-gear me-2 text-muted"></i> Account Settings</a></li>
-                <li><a class="dropdown-item py-2" href="/Settings/AuditLogs"><i class="fa-solid fa-clock-rotate-left me-2 text-muted"></i> Audit Trails</a></li>
+                @if (activeRole == "admin")
+                {
+                    <li><a class="dropdown-item py-2" href="/Settings/AuditLogs"><i class="fa-solid fa-clock-rotate-left me-2 text-muted"></i> Audit Trails</a></li>
+                }
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item py-2 text-danger" href="/Account/Login"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
             </ul>
         </div>
     </div>
 </header>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const role = localStorage.getItem("locps_demo_role") || "officer";
+        const badge = document.getElementById("notifBadge");
+        const list = document.getElementById("notificationList");
+        
+        const loanType = localStorage.getItem("locps_loan_type") || "Home Purchase Loan";
+        const notifications = {
+            customer: [
+                { title: "Application Submitted", time: "10m ago", desc: "Your " + loanType + " application has been submitted.", link: "/Dashboard" },
+                { title: "Documents Verified", time: "5m ago", desc: "Your uploaded PAN and Income papers are verified.", link: "/Dashboard" }
+            ],
+            officer: [
+                { title: "KYC Uploaded", time: "2m ago", desc: "Customer 'Rajesh Kumar' uploaded verification docs.", link: "/Kyc/Verify/9844" },
+                { title: "Documents Uploaded", time: "15m ago", desc: "Application #LOC-9844-32 has documents ready for validation.", link: "/Document/Validate/9844" }
+            ],
+            underwriter: [
+                { title: "Ready for Underwriting", time: "15m ago", desc: "Application #LOC-9844-32 has passed Credit Score thresholds.", link: "/Approval/Review/9844" },
+                { title: "Disbursement Pending", time: "1h ago", desc: "Approved application #LOC-7788-12 needs payment processing.", link: "/Disbursement/Create/9844" }
+            ],
+            admin: [
+                { title: "New User Registered", time: "30m ago", desc: "New loan officer account registered.", link: "/UserManagement" },
+                { title: "System Weights Updated", time: "2h ago", desc: "Scoring engine weights were successfully modified.", link: "/Settings/ScoringRules" }
+            ]
+        };
+
+        const roleNotifs = notifications[role] || [];
+        if (badge) {
+            badge.textContent = roleNotifs.length;
+            if (roleNotifs.length === 0) badge.style.display = "none";
+        }
+
+        if (list) {
+            if (roleNotifs.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-4 text-muted">
+                        <i class="fa-regular fa-bell-slash fs-4 mb-2 d-block"></i>
+                        No notifications
+                    </div>
+                `;
+            } else {
+                list.innerHTML = roleNotifs.map(n => `
+                    <a href="${n.link}" class="list-group-item list-group-item-action p-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold text-dark">${n.title}</span>
+                            <span class="text-muted small text-nowrap">${n.time}</span>
+                        </div>
+                        <p class="mb-0 text-muted small">${n.desc}</p>
+                    </a>
+                `).join('');
+            }
+        }
+    });
+</script>

@@ -24,32 +24,32 @@
     <div class="col-lg-8">
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-header bg-white border-0 py-3">
-                <h5 class="card-title fw-bold text-dark m-0">Application Summary</h5>
+                <h5 class="card-title fw-bold text-dark m-0">Application Summary: <span id="detProductType">Home Purchase Loan</span></h5>
             </div>
             <div class="card-body pt-0">
                 <div class="row g-3">
                     <div class="col-md-6 col-lg-3">
                         <div class="bg-light p-3 rounded text-center">
                             <span class="text-muted small">Sanction Amount</span>
-                            <h4 class="fw-bold text-dark mt-1">₹ 45L</h4>
+                            <h4 class="fw-bold text-dark mt-1" id="detAmount">₹ 45L</h4>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <div class="bg-light p-3 rounded text-center">
                             <span class="text-muted small">Annual Rate</span>
-                            <h4 class="fw-bold text-primary mt-1">8.5%</h4>
+                            <h4 class="fw-bold text-primary mt-1" id="detRate">8.5%</h4>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <div class="bg-light p-3 rounded text-center">
                             <span class="text-muted small">Tenure Months</span>
-                            <h4 class="fw-bold text-dark mt-1">180m</h4>
+                            <h4 class="fw-bold text-dark mt-1" id="detTenure">180m</h4>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <div class="bg-light p-3 rounded text-center">
                             <span class="text-muted small">Estimated EMI</span>
-                            <h4 class="fw-bold text-success mt-1">₹ 44.3K</h4>
+                            <h4 class="fw-bold text-success mt-1" id="detEmi">₹ 44.3K</h4>
                         </div>
                     </div>
                 </div>
@@ -125,6 +125,10 @@
                         <div class="fw-bold mt-1">Rajesh Kumar</div>
                     </li>
                     <li class="list-group-item px-0 py-3">
+                        <div class="text-muted">Loan Product</div>
+                        <div class="fw-bold mt-1" id="detProductTypeRight">Home Purchase Loan</div>
+                    </li>
+                    <li class="list-group-item px-0 py-3">
                         <div class="text-muted">Employment Type & Monthly Income</div>
                         <div class="fw-bold mt-1">Salaried | ₹ 85,000 / mo</div>
                     </li>
@@ -137,3 +141,36 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loanType = localStorage.getItem("locps_loan_type") || "Home Purchase Loan";
+            const loanAmount = localStorage.getItem("locps_loan_amount") ? parseInt(localStorage.getItem("locps_loan_amount")) : 4500000;
+            const loanRate = localStorage.getItem("locps_loan_rate") ? parseFloat(localStorage.getItem("locps_loan_rate")) : 8.5;
+            const loanTenure = localStorage.getItem("locps_loan_tenure") ? parseInt(localStorage.getItem("locps_loan_tenure")) : 180;
+            
+            // EMI Calculation
+            const monthlyRate = loanRate / 12 / 100;
+            const emi = Math.round((loanAmount * monthlyRate * Math.pow(1 + monthlyRate, loanTenure)) / (Math.pow(1 + monthlyRate, loanTenure) - 1));
+
+            const detProductType = document.getElementById("detProductType");
+            if (detProductType) detProductType.textContent = loanType;
+
+            const detProductTypeRight = document.getElementById("detProductTypeRight");
+            if (detProductTypeRight) detProductTypeRight.textContent = loanType;
+
+            const detAmount = document.getElementById("detAmount");
+            if (detAmount) detAmount.textContent = "₹ " + (loanAmount / 100000).toFixed(1) + "L";
+
+            const detRate = document.getElementById("detRate");
+            if (detRate) detRate.textContent = loanRate.toFixed(1) + "%";
+
+            const detTenure = document.getElementById("detTenure");
+            if (detTenure) detTenure.textContent = loanTenure + "m";
+
+            const detEmi = document.getElementById("detEmi");
+            if (detEmi) detEmi.textContent = "₹ " + (emi / 1000).toFixed(1) + "K";
+        });
+    </script>
+}

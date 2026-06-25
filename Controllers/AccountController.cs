@@ -6,6 +6,8 @@ namespace LOCPS.Controllers
     {
         public IActionResult Login() => View();
         
+        public IActionResult Register() => View();
+        
         public IActionResult Logout()
         {
             // Simple mock redirect to login screen

@@ -145,7 +145,18 @@ function finalizeDocuments() {
     btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span> Submitting...`;
     
     setTimeout(() => {
+        const role = localStorage.getItem("locps_demo_role") || "officer";
+        localStorage.setItem("locps_application_state", "submitted");
+        if (window.logWorkflowAction) {
+            window.logWorkflowAction("Document Upload", "LOC-9844-32");
+        }
         showToast("Documents Submitted", "All documents queued for validation desk review.", "success");
-        setTimeout(() => { window.location.href = "/Document/Validate/9844"; }, 1200);
+        setTimeout(() => {
+            if (role === "customer") {
+                window.location.href = "/Dashboard";
+            } else {
+                window.location.href = "/Document/Validate/9844";
+            }
+        }, 1200);
     }, 1000);
 }

@@ -27,7 +27,7 @@
                             <i class="fa-solid fa-check small" style="font-size: 0.65rem;"></i>
                         </div>
                         <div class="fw-bold">KYC Marked Compliant</div>
-                        <span class="text-muted small">By Loan Officer: Likhith Kumar on June 24, 2026 23:45</span>
+                        <span class="text-muted small" id="timeKycCompliant">By Loan Officer: Likhith Kumar on June 24, 2026 23:45</span>
                         <p class="small text-muted mt-2 mb-0">System checked all conditions and validated credentials as Passed.</p>
                     </div>
 
@@ -37,7 +37,7 @@
                             <i class="fa-solid fa-check small" style="font-size: 0.65rem;"></i>
                         </div>
                         <div class="fw-bold">Aadhaar Bio-metrics Match Passed</div>
-                        <span class="text-muted small">Validated on June 24, 2026 23:42</span>
+                        <span class="text-muted small" id="timeAadhaarMatch">Validated on June 24, 2026 23:42</span>
                         <p class="small text-muted mt-2 mb-0">OTP verification code (UIDAI reference: #8849) matched database.</p>
                     </div>
 
@@ -47,7 +47,7 @@
                             <i class="fa-solid fa-check small" style="font-size: 0.65rem;"></i>
                         </div>
                         <div class="fw-bold">PAN Card Database Match Passed</div>
-                        <span class="text-muted small">Validated on June 24, 2026 23:40</span>
+                        <span class="text-muted small" id="timePanMatch">Validated on June 24, 2026 23:40</span>
                         <p class="small text-muted mt-2 mb-0">Validated profile match against Income Tax Department (ITD) database for ID: BKDPK7849D.</p>
                     </div>
 
@@ -57,7 +57,7 @@
                             <i class="fa-solid fa-plus small" style="font-size: 0.65rem;"></i>
                         </div>
                         <div class="fw-bold">KYC Record Created</div>
-                        <span class="text-muted small">Created on June 24, 2026 23:38</span>
+                        <span class="text-muted small" id="timeKycCreated">Created on June 24, 2026 23:38</span>
                         <p class="small text-muted mt-2 mb-0">Applicant profile registered. KYC checks queued.</p>
                     </div>
                 </div>
@@ -65,3 +65,31 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const logs = JSON.parse(localStorage.getItem("locps_workflow_logs") || "[]");
+
+            const kycLog = logs.find(l => l.action === "KYC Submission");
+            if (kycLog) {
+                document.getElementById("timeKycCompliant").textContent = `By Loan Officer: Likhith Kumar on ${kycLog.ts}`;
+            }
+
+            const aadhaarLog = logs.find(l => l.action === "Aadhaar Biometric Check Passed");
+            if (aadhaarLog) {
+                document.getElementById("timeAadhaarMatch").textContent = `Validated on ${aadhaarLog.ts}`;
+            }
+
+            const panLog = logs.find(l => l.action === "PAN Card Check Passed");
+            if (panLog) {
+                document.getElementById("timePanMatch").textContent = `Validated on ${panLog.ts}`;
+            }
+
+            const createLog = logs.find(l => l.action === "Customer Registration");
+            if (createLog) {
+                document.getElementById("timeKycCreated").textContent = `Created on ${createLog.ts}`;
+            }
+        });
+    </script>
+}

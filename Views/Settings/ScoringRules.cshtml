@@ -53,8 +53,9 @@
 
 @section Scripts {
     <script>
+        const sampleCibilScore = parseInt(localStorage.getItem("locps_credit_score_9844") || "785");
         const params = [
-            { id: "bureau", label: "Bureau Score (CIBIL)", weight: 35, sampleScore: 0.87 },
+            { id: "bureau", label: "Bureau Score (CIBIL)", weight: 35, sampleScore: sampleCibilScore / 900 },
             { id: "dti", label: "Debt-to-Income Ratio", weight: 25, sampleScore: 0.81 },
             { id: "history", label: "Credit History Age", weight: 15, sampleScore: 1.0 },
             { id: "repayment", label: "Repayment Consistency", weight: 15, sampleScore: 0.985 },
@@ -135,6 +136,14 @@
             showToast("Weights Saved", "Scoring engine configuration updated successfully.", "success");
         }
 
-        document.addEventListener("DOMContentLoaded", renderParams);
+        document.addEventListener("DOMContentLoaded", function () {
+            const spans = document.querySelectorAll(".card-header span.text-muted");
+            spans.forEach(span => {
+                if (span.textContent.includes("Score for sample applicant")) {
+                    span.textContent = `Score for sample applicant (CIBIL ${sampleCibilScore}, DTI 32%).`;
+                }
+            });
+            renderParams();
+        });
     </script>
 }

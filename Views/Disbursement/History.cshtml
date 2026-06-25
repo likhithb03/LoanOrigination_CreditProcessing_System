@@ -50,6 +50,11 @@
         ];
 
         document.addEventListener("DOMContentLoaded", function () {
+            // Read from local storage if available
+            const loanAmount = localStorage.getItem("locps_loan_amount") ? parseInt(localStorage.getItem("locps_loan_amount")) : 4500000;
+            const fee = Math.round(loanAmount * 0.0025);
+            disbursementsData[0].amount = loanAmount - fee;
+
             const tbody = document.getElementById("disbursementBody");
             tbody.innerHTML = disbursementsData.map(r => {
                 let bc = r.status === "Completed" ? "badge-status-approved" : "badge-status-processing";

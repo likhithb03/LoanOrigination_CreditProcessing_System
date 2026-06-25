@@ -55,6 +55,16 @@ document.addEventListener("DOMContentLoaded", function () {
             if (profileInitials) profileInitials.textContent = prof.initials;
         }
 
+        // Hide Audit Trails option in topbar profile menu if not admin
+        const auditTrailLink = document.querySelector('a[href="/Settings/AuditLogs"]');
+        if (auditTrailLink) {
+            if (role === "admin") {
+                auditTrailLink.parentNode.style.display = "block";
+            } else {
+                auditTrailLink.parentNode.style.display = "none";
+            }
+        }
+
         // Highlight active link matching the current route
         highlightActiveLink();
     }
@@ -74,15 +84,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function syncCookie(role) {
+        document.cookie = "locps_demo_role=" + role + "; path=/; max-age=31536000; SameSite=Lax";
+    }
+
     if (roleSelector) {
         // Load initial role from localStorage
         const savedRole = localStorage.getItem("locps_demo_role") || "officer";
         roleSelector.value = savedRole;
         applyRoleSettings(savedRole);
+        syncCookie(savedRole);
 
         roleSelector.addEventListener("change", function () {
             const chosenRole = roleSelector.value;
             localStorage.setItem("locps_demo_role", chosenRole);
+            syncCookie(chosenRole);
             applyRoleSettings(chosenRole);
             showToast("System Role Switched", `Switched to ${roleSelector.options[roleSelector.selectedIndex].text}. Refreshing context...`, "info");
             setTimeout(() => {
@@ -93,5 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Fallback for page without selector
         const savedRole = localStorage.getItem("locps_demo_role") || "officer";
         applyRoleSettings(savedRole);
+        syncCookie(savedRole);
     }
 });

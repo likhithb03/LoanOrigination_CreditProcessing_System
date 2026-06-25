@@ -14,8 +14,8 @@
             <a href="/Disbursement/Create/9844" class="btn btn-success px-4 py-2">
                 <i class="fa-solid fa-hand-holding-dollar me-2"></i> Initiate Disbursement
             </a>
-            <a href="/Loan" class="btn btn-outline-secondary px-4 py-2">
-                Back to Applications
+            <a href="/Dashboard" class="btn btn-outline-secondary px-4 py-2">
+                Back to Dashboard
             </a>
         </div>
     </div>
@@ -36,10 +36,13 @@
                 <span class="text-muted">Applicant</span><span class="fw-semibold">Rajesh Kumar</span>
             </li>
             <li class="list-group-item px-0 py-3 d-flex justify-content-between">
-                <span class="text-muted">Sanctioned Amount</span><span class="fw-bold text-success">₹ 45,00,000</span>
+                <span class="text-muted">Loan Product</span><span class="fw-semibold" id="appProduct">Home Purchase Loan</span>
             </li>
             <li class="list-group-item px-0 py-3 d-flex justify-content-between">
-                <span class="text-muted">Interest Rate</span><span class="fw-semibold">8.5% p.a.</span>
+                <span class="text-muted">Sanctioned Amount</span><span class="fw-bold text-success" id="appAmount">₹ 45,00,000</span>
+            </li>
+            <li class="list-group-item px-0 py-3 d-flex justify-content-between">
+                <span class="text-muted">Interest Rate</span><span class="fw-semibold" id="appRate">8.5% p.a.</span>
             </li>
             <li class="list-group-item px-0 py-3 d-flex justify-content-between">
                 <span class="text-muted">Decision By</span><span class="fw-semibold">Anjali Sharma (Underwriter)</span>
@@ -50,3 +53,22 @@
         </ul>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loanType = localStorage.getItem("locps_loan_type") || "Home Purchase Loan";
+            const loanAmount = localStorage.getItem("locps_loan_amount") ? parseInt(localStorage.getItem("locps_loan_amount")) : 4500000;
+            const loanRate = localStorage.getItem("locps_loan_rate") ? parseFloat(localStorage.getItem("locps_loan_rate")) : 8.5;
+
+            const appProduct = document.getElementById("appProduct");
+            if (appProduct) appProduct.textContent = loanType;
+
+            const appAmount = document.getElementById("appAmount");
+            if (appAmount) appAmount.textContent = "₹ " + loanAmount.toLocaleString('en-IN');
+
+            const appRate = document.getElementById("appRate");
+            if (appRate) appRate.textContent = loanRate.toFixed(1) + "% p.a.";
+        });
+    </script>
+}

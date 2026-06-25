@@ -25,25 +25,25 @@
                     <div class="col-6 col-md-3">
                         <div class="bg-light p-3 rounded text-center">
                             <div class="text-muted small">Loan Amount</div>
-                            <div class="fw-bold text-dark mt-1">₹ 45 Lakhs</div>
+                            <div class="fw-bold text-dark mt-1" id="revAmount">₹ 45 Lakhs</div>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
                         <div class="bg-light p-3 rounded text-center">
                             <div class="text-muted small">Interest Rate</div>
-                            <div class="fw-bold text-primary mt-1">8.5% p.a.</div>
+                            <div class="fw-bold text-primary mt-1" id="revRate">8.5% p.a.</div>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
                         <div class="bg-light p-3 rounded text-center">
                             <div class="text-muted small">Monthly EMI</div>
-                            <div class="fw-bold text-success mt-1">₹ 44,312</div>
+                            <div class="fw-bold text-success mt-1" id="revEmi">₹ 44,312</div>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
                         <div class="bg-light p-3 rounded text-center">
                             <div class="text-muted small">CIBIL Score</div>
-                            <div class="fw-bold text-success mt-1">785 / 900</div>
+                            <div class="fw-bold mt-1" id="revCibilScore">785 / 900</div>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                     </li>
                     <li class="list-group-item px-0 py-3 d-flex justify-content-between">
                         <span><i class="fa-solid fa-circle-check text-success me-2"></i> Credit Score Evaluation</span>
-                        <span class="badge-status badge-status-approved">Passed (Tier A)</span>
+                        <span class="badge-status badge-status-approved" id="revCreditEvaluationBadge">Passed (Tier A)</span>
                     </li>
                     <li class="list-group-item px-0 py-3 d-flex justify-content-between">
                         <span><i class="fa-solid fa-circle-check text-success me-2"></i> Document Upload &amp; Validation</span>
@@ -102,10 +102,10 @@
                 <div class="mb-3">
                     <div class="d-flex justify-content-between mb-1 small">
                         <span class="text-muted">Overall Risk Score</span>
-                        <span class="fw-bold text-success">Low Risk</span>
+                        <span class="fw-bold text-success" id="revRiskLabel">Low Risk</span>
                     </div>
                     <div class="progress" style="height: 10px;">
-                        <div class="progress-bar bg-success" style="width: 78%;"></div>
+                        <div class="progress-bar bg-success" id="revRiskBar" style="width: 78%;"></div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -142,10 +142,10 @@
                         <span class="text-muted">Monthly Income</span><span class="fw-semibold">₹ 85,000</span>
                     </li>
                     <li class="list-group-item px-0 py-2 d-flex justify-content-between">
-                        <span class="text-muted">Product</span><span class="fw-semibold">Home Purchase</span>
+                        <span class="text-muted">Product</span><span class="fw-semibold" id="revProduct">Home Purchase</span>
                     </li>
                     <li class="list-group-item px-0 py-2 d-flex justify-content-between">
-                        <span class="text-muted">Tenure</span><span class="fw-semibold">15 Years (180m)</span>
+                        <span class="text-muted">Tenure</span><span class="fw-semibold" id="revTenure">15 Years (180m)</span>
                     </li>
                 </ul>
             </div>
@@ -168,17 +168,130 @@
 
 @section Scripts {
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loanType = localStorage.getItem("locps_loan_type") || "Home Purchase Loan";
+            const loanAmount = localStorage.getItem("locps_loan_amount") ? parseInt(localStorage.getItem("locps_loan_amount")) : 4500000;
+            const loanRate = localStorage.getItem("locps_loan_rate") ? parseFloat(localStorage.getItem("locps_loan_rate")) : 8.5;
+            const loanTenure = localStorage.getItem("locps_loan_tenure") ? parseInt(localStorage.getItem("locps_loan_tenure")) : 180;
+            
+            // EMI Calculation
+            const monthlyRate = loanRate / 12 / 100;
+            const emi = Math.round((loanAmount * monthlyRate * Math.pow(1 + monthlyRate, loanTenure)) / (Math.pow(1 + monthlyRate, loanTenure) - 1));
+
+            // Populate Overview Card
+            const revAmount = document.getElementById("revAmount");
+            if (revAmount) revAmount.textContent = "₹ " + (loanAmount / 100000).toFixed(0) + " Lakhs";
+
+            const revRate = document.getElementById("revRate");
+            if (revRate) revRate.textContent = loanRate.toFixed(1) + "% p.a.";
+
+            const revEmi = document.getElementById("revEmi");
+            if (revEmi) revEmi.textContent = "₹ " + emi.toLocaleString('en-IN');
+
+            // Populate Applicant Profile Snapshot
+            const revProduct = document.getElementById("revProduct");
+            if (revProduct) revProduct.textContent = loanType;
+            
+            const revTenure = document.getElementById("revTenure");
+            if (revTenure) {
+                const tenureYears = (loanTenure / 12).toFixed(0);
+                revTenure.textContent = `${tenureYears} Years (${loanTenure}m)`;
+            }
+
+            // Dynamic CIBIL & Risk calculation
+            const score = parseInt(localStorage.getItem("locps_credit_score_9844") || "785");
+            const revCibilScore = document.getElementById("revCibilScore");
+            if (revCibilScore) {
+                revCibilScore.textContent = `${score} / 900`;
+                revCibilScore.className = "fw-bold mt-1";
+                if (score >= 750) revCibilScore.classList.add("text-success");
+                else if (score >= 700) revCibilScore.classList.add("text-info");
+                else if (score >= 600) revCibilScore.classList.add("text-warning");
+                else revCibilScore.classList.add("text-danger");
+            }
+
+            // Update Risk Summary panel
+            const revRiskLabel = document.getElementById("revRiskLabel");
+            const revRiskBar = document.getElementById("revRiskBar");
+            if (revRiskLabel && revRiskBar) {
+                let riskText = "Low Risk";
+                let riskColorClass = "text-success";
+                let barColorClass = "bg-success";
+                let riskPercentage = 78; // default width for 785 CIBIL
+
+                if (score >= 750) {
+                    riskText = "Low Risk";
+                    riskColorClass = "text-success";
+                    barColorClass = "bg-success";
+                    riskPercentage = 75 + Math.round(((score - 750) / 150) * 20); // 75% to 95%
+                } else if (score >= 700) {
+                    riskText = "Medium-Low Risk";
+                    riskColorClass = "text-info";
+                    barColorClass = "bg-info";
+                    riskPercentage = 60 + Math.round(((score - 700) / 50) * 14); // 60% to 74%
+                } else if (score >= 600) {
+                    riskText = "Medium Risk";
+                    riskColorClass = "text-warning";
+                    barColorClass = "bg-warning";
+                    riskPercentage = 40 + Math.round(((score - 600) / 100) * 19); // 40% to 59%
+                } else {
+                    riskText = "High Risk";
+                    riskColorClass = "text-danger";
+                    barColorClass = "bg-danger";
+                    riskPercentage = Math.round((score / 600) * 39); // 0% to 39%
+                }
+
+                revRiskLabel.textContent = riskText;
+                revRiskLabel.className = `fw-bold ${riskColorClass}`;
+                revRiskBar.className = `progress-bar ${barColorClass}`;
+                revRiskBar.style.width = `${riskPercentage}%`;
+            }
+
+            // Update Due Diligence Checklist Badge
+            const revCreditEvaluationBadge = document.getElementById("revCreditEvaluationBadge");
+            if (revCreditEvaluationBadge) {
+                let tierText = "Tier A";
+                let badgeClass = "badge-status badge-status-approved";
+                if (score >= 750) {
+                    tierText = "Passed (Tier A)";
+                    badgeClass = "badge bg-success bg-opacity-10 text-success border-0 px-3 py-1 fw-semibold";
+                } else if (score >= 700) {
+                    tierText = "Passed (Tier B)";
+                    badgeClass = "badge bg-info bg-opacity-10 text-info border-0 px-3 py-1 fw-semibold";
+                } else if (score >= 600) {
+                    tierText = "Passed (Tier C)";
+                    badgeClass = "badge bg-warning bg-opacity-10 text-warning border-0 px-3 py-1 fw-semibold";
+                } else {
+                    tierText = "Declined (Tier D)";
+                    badgeClass = "badge bg-danger bg-opacity-10 text-danger border-0 px-3 py-1 fw-semibold";
+                }
+                revCreditEvaluationBadge.textContent = tierText;
+                revCreditEvaluationBadge.className = badgeClass;
+            }
+        });
+
         function confirmApprove(e) {
             e.preventDefault();
             const remarks = document.getElementById("uwRemarks").value.trim();
             if (!remarks) { showToast("Remarks Required", "Please enter underwriter remarks before approving.", "warning"); return; }
+            
+            const loanAmount = localStorage.getItem("locps_loan_amount") ? parseInt(localStorage.getItem("locps_loan_amount")) : 4500000;
+            const loanRate = localStorage.getItem("locps_loan_rate") ? parseFloat(localStorage.getItem("locps_loan_rate")) : 8.5;
+            const lakhs = (loanAmount / 100000).toFixed(0);
+
             showConfirmationModal(
                 '<span class="text-success"><i class="fa-solid fa-check-circle me-2"></i>Approve Loan Application?</span>',
-                `<p>You are about to <strong>approve</strong> application <strong>LOC-9844-32</strong> for ₹ 45 Lakhs at 8.5% p.a.</p><p class="text-muted small mb-0">This action will be logged in the compliance audit trail.</p>`,
+                `<p>You are about to <strong>approve</strong> application <strong>LOC-9844-32</strong> for ₹ ${lakhs} Lakhs at ${loanRate.toFixed(1)}% p.a.</p><p class="text-muted small mb-0">This action will be logged in the compliance audit trail.</p>`,
                 function () {
+                    localStorage.setItem("locps_application_state", "approved");
+                    if (window.logWorkflowAction) {
+                        window.logWorkflowAction("Underwriter Review", "LOC-9844-32");
+                        window.logWorkflowAction("Loan Approval", "LOC-9844-32");
+                        window.logWorkflowAction("Sanction Letter Generation", "LOC-9844-32");
+                    }
                     document.getElementById("confirmationModalConfirmBtn").classList.replace("btn-primary","btn-success");
                     showToast("Loan Approved!", "LOC-9844-32 has been approved and forwarded to Disbursement.", "success");
-                    setTimeout(() => { window.location.href = "/Disbursement/Create/9844"; }, 1500);
+                    setTimeout(() => { window.location.href = "/Approval/Approve/9844"; }, 1500);
                 }
             );
             document.getElementById("confirmationModalConfirmBtn").textContent = "Confirm Approval";
@@ -193,8 +306,13 @@
                 '<span class="text-danger"><i class="fa-solid fa-xmark-circle me-2"></i>Reject Loan Application?</span>',
                 `<p>You are about to <strong class="text-danger">reject</strong> application <strong>LOC-9844-32</strong>.</p><p class="text-muted small mb-0">The applicant will be notified of the outcome.</p>`,
                 function () {
+                    localStorage.setItem("locps_application_state", "rejected");
+                    if (window.logWorkflowAction) {
+                        window.logWorkflowAction("Underwriter Review", "LOC-9844-32");
+                        window.logWorkflowAction("Loan Rejection", "LOC-9844-32");
+                    }
                     showToast("Loan Rejected", "LOC-9844-32 has been rejected. Applicant notified.", "danger");
-                    setTimeout(() => { window.location.href = "/Loan"; }, 1500);
+                    setTimeout(() => { window.location.href = "/Dashboard"; }, 1500);
                 }
             );
             document.getElementById("confirmationModalConfirmBtn").textContent = "Confirm Rejection";

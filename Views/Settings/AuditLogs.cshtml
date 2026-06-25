@@ -37,7 +37,7 @@
 
 @section Scripts {
     <script>
-        const auditLogs = [
+        const defaultLogs = [
             { ts: "2026-06-24 23:45:12", user: "Anjali Sharma", action: "Loan Approved", resource: "LOC-9844-32", status: "Success" },
             { ts: "2026-06-24 23:40:08", user: "Likhith Kumar", action: "KYC Verified", resource: "CUST-9011", status: "Success" },
             { ts: "2026-06-24 23:35:55", user: "Likhith Kumar", action: "Document Upload", resource: "LOC-9844-32", status: "Success" },
@@ -47,9 +47,17 @@
             { ts: "2026-06-24 22:55:30", user: "System Administrator", action: "User Account Created", resource: "anjali.s@locps.in", status: "Success" }
         ];
 
+        function getAuditLogs() {
+            if (!localStorage.getItem("locps_workflow_logs")) {
+                localStorage.setItem("locps_workflow_logs", JSON.stringify(defaultLogs));
+            }
+            return JSON.parse(localStorage.getItem("locps_workflow_logs"));
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const tbody = document.getElementById("auditLogBody");
-            tbody.innerHTML = auditLogs.map(log => `<tr>
+            const logs = getAuditLogs();
+            tbody.innerHTML = logs.map(log => `<tr>
                 <td class="text-muted small">${log.ts}</td>
                 <td class="fw-semibold">${log.user}</td>
                 <td>${log.action}</td>
@@ -59,8 +67,9 @@
         });
 
         function exportAuditLog() {
+            const logs = getAuditLogs();
             const csv = ["Timestamp,User,Action,Resource,Status",
-                ...auditLogs.map(l => `"${l.ts}","${l.user}","${l.action}","${l.resource}","${l.status}"`)
+                ...logs.map(l => `"${l.ts}","${l.user}","${l.action}","${l.resource}","${l.status}"`)
             ].join("\n");
             const blob = new Blob([csv], { type: "text/csv" });
             const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "audit_log.csv"; a.click();
