@@ -159,7 +159,7 @@ namespace LOCPS
         {
             context.Result = new ViewResult
             {
-                ViewName = "~/Roles/Shared/Views/AccessDenied.cshtml",
+                ViewName = "~/Views/Shared/AccessDenied.cshtml",
                 StatusCode = 403
             };
         }
