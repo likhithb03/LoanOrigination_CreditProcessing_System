@@ -10,9 +10,9 @@ namespace LOCPS.Models
         [Key]
         public int KycId { get; set; }
         //Foreign key for the Application id from LoanApplication Table
-        [ForeignKey(nameof(Aplication))]
+        [ForeignKey(nameof(Application))]
         public int ApplicationId { get; set; }
-        public LoanApplication Aplication { get; set; } = null!;
+        public LoanApplication Application { get; set; } = null!;
 
         [Required]
         [StringLength(15)]

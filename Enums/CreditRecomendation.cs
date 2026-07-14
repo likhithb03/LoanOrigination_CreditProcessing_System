@@ -1,4 +1,4 @@
-public enum CreditRecomendation
+public enum CreditRecommendation
 {
     Pending,
     Approved,

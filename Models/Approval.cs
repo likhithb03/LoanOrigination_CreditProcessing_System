@@ -9,9 +9,9 @@ namespace LOCPS.Models
         [Key]
         public int ApprovalId { get; set; }
 
-        [ForeignKey(nameof(Aplication))]
+        [ForeignKey(nameof(Application))]
         public int ApplicationId { get; set; }
-        public LoanApplication Aplication { get; set; } = null!;
+        public LoanApplication Application { get; set; } = null!;
 
         public long? ApprovedAmount { get; set; }
 
