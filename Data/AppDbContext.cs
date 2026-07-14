@@ -77,7 +77,7 @@ namespace LOCPS.Data
                 .Property(lp => lp.ProcessingFee)
                 .HasPrecision(18, 2);
             modelBuilder.Entity<Kyc>()
-                .HasOne(k => k.Aplication)
+                .HasOne(k => k.Application)
                 .WithMany()
                 .HasForeignKey(k => k.ApplicationId)
                 .OnDelete(DeleteBehavior.Restrict);
@@ -89,7 +89,7 @@ namespace LOCPS.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CreditEvaluation>()
-                 .HasOne(k => k.Aplication)
+                 .HasOne(k => k.Application)
                  .WithMany()
                  .HasForeignKey(k => k.ApplicationId)
                  .OnDelete(DeleteBehavior.Restrict);
@@ -134,7 +134,7 @@ namespace LOCPS.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Approval>()
-                .HasOne(d => d.Aplication)
+                .HasOne(d => d.Application)
                 .WithMany()
                 .HasForeignKey(d => d.ApplicationId)
                 .OnDelete(DeleteBehavior.Restrict);

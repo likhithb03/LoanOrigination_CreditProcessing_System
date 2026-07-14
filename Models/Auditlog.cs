@@ -7,7 +7,7 @@ namespace LOCPS.Models
     public class Auditlog
     {
         [Key]
-        public int Auditid { get; set; }
+        public int AuditId { get; set; }
 
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
@@ -18,10 +18,10 @@ namespace LOCPS.Models
         [StringLength(50)]
         public string EntityId { get; set; } = string.Empty;
         [StringLength(50)]
-        public string Oldvalue { get; set; } = string.Empty;
+        public string OldValue { get; set; } = string.Empty;
         [StringLength(50)]
 
-        public string Newvalue { get; set; } = string.Empty;
+        public string NewValue { get; set; } = string.Empty;
 
         public DateTime? Timestamp { get; set; }
         [StringLength(50)]
