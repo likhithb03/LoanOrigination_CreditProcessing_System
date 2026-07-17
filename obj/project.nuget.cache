@@ -1,6 +1,7 @@
 {
   "version": 2,
 <<<<<<< HEAD
+<<<<<<< HEAD
   "dgSpecHash": "/wp3P3G0Vn4=",
   "success": true,
   "projectFilePath": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\LOCPS.csproj",
@@ -59,5 +60,11 @@
     "C:\\Users\\2506830\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.4\\system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
   ],
 >>>>>>> main
+=======
+  "dgSpecHash": "/wp3P3G0Vn4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\LOCPS.csproj",
+  "expectedPackageFiles": [],
+>>>>>>> 32dcee6e7732e6c71a2471f01b0a2a58006ceebd
   "logs": []
 }

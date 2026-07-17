@@ -3098,6 +3098,7 @@
     "version": "1.0.0",
     "restore": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\LOCPS.csproj",
       "projectName": "LOCPS",
       "projectPath": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\LOCPS.csproj",
@@ -3110,6 +3111,13 @@
       "packagesPath": "C:\\Users\\2506830\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\2506830\\OneDrive - Cognizant\\Desktop\\LOCPS\\LOCPS Project\\obj\\",
 >>>>>>> main
+=======
+      "projectUniqueName": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\LOCPS.csproj",
+      "projectName": "LOCPS",
+      "projectPath": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\LOCPS.csproj",
+      "packagesPath": "C:\\Users\\2506770\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\obj\\",
+>>>>>>> 32dcee6e7732e6c71a2471f01b0a2a58006ceebd
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
