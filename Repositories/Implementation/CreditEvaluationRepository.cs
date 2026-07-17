@@ -31,7 +31,7 @@ namespace LOCPS.Repositories.Implementation
             return CreditEvaluation;
         }
 
-        public async Task<IEnumerable<CreditEvaluation>> GetPendingCreditEvaluationAsync(CreditRecomendation CreditRecomendations)
+        public async Task<IEnumerable<CreditEvaluation>> GetPendingCreditEvaluationAsync(CreditRecommendation CreditRecomendations)
         {
             return await _context.CreditEvaluation.Where(c => c.CreditRecomendations == CreditRecomendations).ToListAsync();
         }

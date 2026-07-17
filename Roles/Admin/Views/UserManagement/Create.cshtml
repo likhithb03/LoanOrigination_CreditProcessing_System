@@ -17,44 +17,41 @@
                 <form method="post" action="/UserManagement/Create">
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">User Name <span class="text-danger">*</span></label>
+                            <input type="text" name="UserName" class="form-control py-2 shadow-none" placeholder="e.g. pradeep_menon" required />
+                        </div>
+                        <div class="col-md-6">
                             <label class="form-label fw-semibold text-muted small">Full Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control py-2 shadow-none" placeholder="e.g. Pradeep Menon" required />
+                            <input type="text" name="FullName" class="form-control py-2 shadow-none" placeholder="e.g. Pradeep Menon" required />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-muted small">Email Address <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control py-2 shadow-none" placeholder="e.g. pradeep@locps.in" required />
+                            <input type="email" name="Email" class="form-control py-2 shadow-none" placeholder="e.g. pradeep@locps.in" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted small">Phone Number <span class="text-danger">*</span></label>
+                            <input type="tel" name="PhoneNumber" class="form-control py-2 shadow-none" placeholder="e.g. +91 98765 43210" required />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-muted small">Assigned Role <span class="text-danger">*</span></label>
-                            <select class="form-select py-2 shadow-none" required>
+                            <select name="assignedRole" class="form-select py-2 shadow-none" required>
                                 <option value="" disabled selected>Select role</option>
                                 <option value="officer">Loan Officer</option>
-                                <option value="underwriter">Underwriter</option>
+                                <option value="underwriter">UnderWriter</option>
                                 <option value="admin">System Admin</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted small">Assigned Branch</label>
-                            <select class="form-select py-2 shadow-none">
-                                <option value="hq" selected>Bangalore HQ</option>
-                                <option value="chennai">Chennai Branch</option>
-                                <option value="mumbai">Mumbai Branch</option>
-                            </select>
+                            <label class="form-label fw-semibold text-muted small">Initial Password <span class="text-danger">*</span></label>
+                            <input type="password" name="PasswordHash" class="form-control py-2 shadow-none" placeholder="Temporary password" required minlength="6" />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted small">Initial Password</label>
-                            <input type="password" class="form-control py-2 shadow-none" placeholder="Temp password" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted small">Account Status</label>
-                            <select class="form-select py-2 shadow-none">
-                                <option value="active" selected>Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
+                            <label class="form-label fw-semibold text-muted small">Confirm Password <span class="text-danger">*</span></label>
+                            <input type="password" id="confirmPassword" class="form-control py-2 shadow-none" placeholder="Confirm password" required minlength="6" />
                         </div>
                     </div>
                     <div class="mt-4 d-flex gap-2">
-                        <a href="/UserManagement" class="btn btn-primary px-4 py-2"><i class="fa-solid fa-user-plus me-2"></i> Create User Account</a>
+                        <button type="submit" class="btn btn-primary px-4 py-2"><i class="fa-solid fa-user-plus me-2"></i> Create User Account</button>
                         <a href="/UserManagement" class="btn btn-light border px-4 py-2">Cancel</a>
                     </div>
                 </form>

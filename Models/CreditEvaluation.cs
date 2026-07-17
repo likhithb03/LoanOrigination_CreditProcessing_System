@@ -9,10 +9,10 @@ namespace LOCPS.Models
         [Key]
         public int CreditId { get; set; }
 
-        [ForeignKey(nameof(Aplication))]
+        [ForeignKey(nameof(Application))]
         public int ApplicationId { get; set; }
 
-        public LoanApplication Aplication { get; set; } = null!;
+        public LoanApplication Application { get; set; } = null!;
 
         [Range(300,900)]
         public int CreditScore { get; set; }
@@ -27,7 +27,7 @@ namespace LOCPS.Models
         public decimal ExistingLiabilities { get; set; }
 
 
-        public CreditRecomendation? CreditRecomendations { get; set; }
+        public CreditRecommendation? CreditRecomendations { get; set; }
 
 
         [ForeignKey(nameof(EvaluatedBy))]
