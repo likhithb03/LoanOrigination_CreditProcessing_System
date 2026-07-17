@@ -1,6 +1,7 @@
 @{
     Layout = null;
 }
+@model LOCPS.Models.User;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,80 +29,39 @@
     <div class="card register-card bg-white">
         <div class="register-header text-center bg-white">
             <h2 class="fw-bold m-0" style="color: var(--secondary-navy);">
-                <i class="fa-solid fa-user-plus me-2" style="color: var(--primary-blue);"></i>Create Customer Account
+                <i class="fa-solid fa-user-plus me-2" style="color: var(--primary-blue);"></i>Customer Registration
             </h2>
-            <p class="text-muted small mb-0 mt-1">Register to view products, apply for loans, and track applications.</p>
+            <p class="text-muted small mb-0 mt-1">Create your customer account to view loan products, submit applications, and track your loan status.</p>
         </div>
 
         <div class="card-body p-4 pt-3">
-            <form method="post" action="/Account/Register">
-                <input type="hidden" name="role" value="customer" />
+            <form asp-action="Register" asp-controller="Account" method="post">
+                <!-- Customers register with RoleId = 0 (Customer role) -->
+                <input type="hidden" name="RoleId" value="1" />
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small">First Name <span class="text-danger">*</span></label>
-                        <input type="text" name="firstName" class="form-control py-2 shadow-none" placeholder="e.g. Rajesh" required />
+                        <label class="form-label fw-semibold text-muted small">User Name <span class="text-danger">*</span></label>
+                        <input type="text" name="UserName" class="form-control py-2 shadow-none" placeholder="e.g. rajesh_kumar" required />
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small">Last Name <span class="text-danger">*</span></label>
-                        <input type="text" name="lastName" class="form-control py-2 shadow-none" placeholder="e.g. Kumar" required />
+                        <label class="form-label fw-semibold text-muted small">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" name="FullName" class="form-control py-2 shadow-none" placeholder="e.g. Rajesh Kumar" required />
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-muted small">Email Address <span class="text-danger">*</span></label>
-                        <input type="email" name="email" class="form-control py-2 shadow-none" placeholder="e.g. customer@domain.com" required />
+                        <input type="email" name="Email" class="form-control py-2 shadow-none" placeholder="e.g. customer@domain.com" required />
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-muted small">Phone Number <span class="text-danger">*</span></label>
-                        <input type="tel" name="phone" class="form-control py-2 shadow-none" placeholder="e.g. +91 98765 43210" required />
+                        <input type="tel" name="PhoneNumber" class="form-control py-2 shadow-none" placeholder="e.g. +91 98765 43210" required />
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-muted small">Password <span class="text-danger">*</span></label>
-                        <input type="password" name="password" class="form-control py-2 shadow-none" placeholder="Create password" required minlength="6" />
+                        <input type="password" name="PasswordHash" class="form-control py-2 shadow-none" placeholder="Create password" required minlength="6" />
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold text-muted small">Confirm Password <span class="text-danger">*</span></label>
-                        <input type="password" name="confirmPassword" class="form-control py-2 shadow-none" placeholder="Confirm password" required minlength="6" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small">Date of Birth <span class="text-danger">*</span></label>
-                        <input type="date" name="dob" class="form-control py-2 shadow-none" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small">Gender <span class="text-danger">*</span></label>
-                        <select name="gender" class="form-select py-2 shadow-none" required>
-                            <option value="" disabled selected>Select gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="col-12"><hr class="text-muted opacity-25"></div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small">Employment Type <span class="text-danger">*</span></label>
-                        <select name="employment" class="form-select py-2 shadow-none" required>
-                            <option value="" disabled selected>Select employment</option>
-                            <option value="salaried">Salaried</option>
-                            <option value="self-employed">Self-Employed / Business Owner</option>
-                            <option value="unemployed">Unemployed</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small">Monthly Net Income (INR) <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light text-muted">₹</span>
-                            <input type="number" name="income" class="form-control py-2 shadow-none" placeholder="e.g. 75000" required min="0" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small">ID Document Type <span class="text-danger">*</span></label>
-                        <select name="idType" class="form-select py-2 shadow-none" required>
-                            <option value="pan" selected>PAN Card</option>
-                            <option value="passport">Passport</option>
-                            <option value="aadhaar">Aadhaar Card</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold text-muted small">Document ID Number <span class="text-danger">*</span></label>
-                        <input type="text" name="idNumber" class="form-control py-2 shadow-none" placeholder="e.g. ABCDE1234F" required />
+                        <input type="password" id="confirmPassword" class="form-control py-2 shadow-none" placeholder="Confirm password" required minlength="6" />
                     </div>
                 </div>
                 <div class="mt-4 pt-2 d-flex flex-column gap-2">
@@ -121,5 +81,17 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const password = document.querySelector('input[name="PasswordHash"]').value;
+            const confirmPassword = document.querySelector('#confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match. Please try again.');
+                document.querySelector('#confirmPassword').focus();
+            }
+        });
+    </script>
 </body>
 </html>
