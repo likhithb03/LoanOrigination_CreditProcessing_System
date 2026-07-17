@@ -1,5 +1,6 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "RFLaAC+0yDY=",
   "success": true,
   "projectFilePath": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\LOCPS.csproj",
@@ -63,4 +64,11 @@
       "targetGraphs": []
     }
   ]
+=======
+  "dgSpecHash": "/wp3P3G0Vn4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\2506770\\LoanProcessing_System_v2\\LoanProcessing_System\\LOCPS.csproj",
+  "expectedPackageFiles": [],
+  "logs": []
+>>>>>>> 32dcee6e7732e6c71a2471f01b0a2a58006ceebd
 }
